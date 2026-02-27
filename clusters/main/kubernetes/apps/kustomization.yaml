@@ -4,4 +4,5 @@ resources:
   - audiobookshelf/ks.yaml
   - ext-scrutiny/ks.yaml
   - external-dns/ks.yaml
+  - gatus/ks.yaml
   - kubernetes-dashboard/ks.yaml

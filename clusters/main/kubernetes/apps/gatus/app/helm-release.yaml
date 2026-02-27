@@ -1,0 +1,456 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gatus
+  namespace: gatus
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: gatus
+      version: 3.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 25m
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        name: backblaze
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        hosts:
+          - host: gatus.${BASE_DOMAIN}
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: "Network - Monitoring"
+            widget:
+              enabled: enabled
+          traefik:
+            enabled: false
+    cnpg:
+      main:
+        enabled: true
+        cluster:
+          singleNode: true
+        mode: recovery # change to `recovery` on restore
+        backups:
+          enabled: true
+          credentials: backblaze
+          retentionPolicy: "14d"
+        recovery:
+          credentials: backblaze
+    configmap:
+      config:
+        enabled: true
+        data:
+          config.yaml: |
+            storage:
+              type: postgres
+              path: "postgresql://gatus:PLACEHOLDERPASSWORD@gatus-cnpg-main-rw:5432/gatus?client_encoding=utf8"
+
+            ui:
+              logo: "https://musson.uk/favicon.png"
+              buttons:
+                - name: homepage
+                  link: "https://homepage.${BASE_DOMAIN}"
+              default-sort-by: group
+
+            alerting:
+              ntfy:
+                url: "https://ntfy.${BASE_DOMAIN_EXT}"
+                topic: "gatus-updates"
+                token: "${NTFY_TOKEN_GATUS}"
+                priority: 5
+                default-alert:
+                  failure-threshold: 1
+                  success-threshold: 1
+                  send-on-resolved: true
+              email:
+                from: "${GATUS_EMAIL_HOST_USER}"
+                username: "${GATUS_EMAIL_HOST_USER}"
+                password: "${GATUS_EMAIL_HOST_PASSWORD}"
+                host: "${SMTP_SERVER}"
+                port: ${SMTP_PORT}
+                to: "${EMAIL1}"
+                default-alert:
+                  failure-threshold: 1
+                  success-threshold: 1
+                  send-on-resolved: true
+
+            default-endpoint-apps: &defaults-apps
+              group: apps-hydra
+              interval: 5m
+              conditions:
+                - "[STATUS] == 200"
+                - "[CERTIFICATE_EXPIRATION] > 48h"
+              alerts:
+                - type: ntfy
+              maintenance-windows:
+                - start: "00:00"
+                  duration: 6h
+                  timezone: "Europe/London"
+
+            default-endpoint-pluto: &defaults-pluto
+              group: pluto
+              interval: 5m
+              conditions:
+                - "[STATUS] == 200"
+                - "[CERTIFICATE_EXPIRATION] > 48h"
+              alerts:
+                - type: ntfy
+
+            default-endpoint-dns: &defaults-dns
+              group: dns
+              interval: 5m
+              dns:
+                query-name: "d.root-servers.net"
+                query-type: "A"
+              conditions:
+                - "[CONNECTED] == true"
+                - "[DNS_RCODE] == NOERROR"
+                - "[RESPONSE_TIME] < 50"
+              alerts:
+                - type: ntfy
+                  failure-threshold: 2
+
+            default-endpoint-ups: &defaults-ups
+              group: ups
+              interval: 5m
+              conditions:
+                - "[CONNECTED] == true"
+              alerts:
+                - type: ntfy
+
+            default-endpoint-websites: &defaults-websites
+              group: websites
+              interval: 30m
+              conditions:
+                - "[STATUS] == 200"
+                - "[CERTIFICATE_EXPIRATION] > 48h"
+              alerts:
+                - type: ntfy
+
+            default-endpoint-network: &defaults-network
+              group: network
+              interval: 10m
+              conditions:
+                - "[STATUS] == 200"
+              alerts:
+                - type: ntfy
+            
+            endpoints:
+              ## websites
+              - name: musson.uk
+                <<: *defaults-websites
+                url: "https://musson.uk"
+              - name: muss.uk
+                <<: *defaults-websites
+                url: "https://muss.uk"
+              - name: minecraft-download-links
+                <<: *defaults-websites
+                url: "https://net-secondary.web.minecraft-services.net/api/v1.0/download/links"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "has([BODY].result.links) == true"
+              - name: hey
+                <<: *defaults-websites
+                url: "https://app.hey.com"
+              
+              ## apps-pluto
+              - name: scrutiny
+                <<: *defaults-pluto
+                url: "https://scrutiny.${BASE_DOMAIN}/api/health"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].success == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              
+              ## apps-hydra
+              - name: jellyfin
+                <<: *defaults-apps
+                url: "https://jellyfin.${BASE_DOMAIN}/health"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY] == Healthy"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: shlink
+                <<: *defaults-apps
+                url: "https://muss.uk/rest/health"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].status == pass"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: nebula-sync
+                <<: *defaults-apps
+                url: "https://nebula-sync.${BASE_DOMAIN}/health"
+              - name: ntfy
+                <<: *defaults-apps
+                url: "https://ntfy.${BASE_DOMAIN_EXT}/v1/health"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].healthy == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+                alerts:
+                  - type: email
+              - name: peanut
+                <<: *defaults-apps
+                url: "https://peanut.${BASE_DOMAIN}/api/ping"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY] == \"pong\""
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: homepage
+                <<: *defaults-apps
+                url: "https://homepage.${BASE_DOMAIN}/api/healthcheck"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY] == up"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: shlink-web
+                <<: *defaults-apps
+                url: "https://shlink-web.${BASE_DOMAIN}"
+              - name: audiobookshelf
+                <<: *defaults-apps
+                url: "https://audiobookshelf.${BASE_DOMAIN}/ping"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].success == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: home-assistant
+                <<: *defaults-apps
+                url: "tcp://${HASS_IP}:8123"
+                conditions:
+                  - "[CONNECTED] == true"
+              - name: metube
+                <<: *defaults-apps
+                url: "https://metube.${BASE_DOMAIN}/version"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "has([BODY].version) == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: linkwarden
+                <<: *defaults-apps
+                url: "https://linkwarden.${BASE_DOMAIN}/api/v1/logins"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].credentialsEnabled == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: jellyseerr
+                <<: *defaults-apps
+                url: "https://jellyseerr.${BASE_DOMAIN}/api/v1/status"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].restartRequired == false"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: it-tools
+                <<: *defaults-apps
+                url: "https://it-tools.${BASE_DOMAIN}"
+              - name: kubernetes-dashboard
+                <<: *defaults-apps
+                url: "https://ks.${BASE_DOMAIN}"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: mosquitto
+                <<: *defaults-apps
+                url: "tcp://${MQTT_IP}:1883"
+                conditions:
+                  - "[CONNECTED] == true"
+              - name: n8n
+                <<: *defaults-apps
+                url: "https://n8n.${BASE_DOMAIN}/healthz/readiness"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].status == ok"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: nextcloud
+                <<: *defaults-apps
+                url: "https://nc.${BASE_DOMAIN_EXT}/ocs/v2.php/apps/serverinfo/api/v1/info?format=json"
+                headers:
+                  NC-Token: "${NEXTCLOUD_API_KEY}"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].ocs.meta.status == ok"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: n8n-hooks
+                <<: *defaults-apps
+                url: "https://n8n-hooks.${BASE_DOMAIN_EXT}"
+              - name: home-assistant-api
+                <<: *defaults-apps
+                url: "https://hass.${BASE_DOMAIN_EXT}/api/"
+                headers:
+                  Authorization: "Bearer ${HOMEASSISTANT_API_KEY}"
+                  Accept: "application/json"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].message == pat(API running*)"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: paperless-ngx
+                <<: *defaults-apps
+                url: "https://paperless-ngx.${BASE_DOMAIN}/api/status/"
+                headers:
+                  Authorization: "Token ${PAPERLESS_API_KEY}"
+                  Accept: "application/json"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].database.status == OK"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: tududi
+                <<: *defaults-apps
+                url: "https://tududi.${BASE_DOMAIN}/api/v1/health"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].status == ok"
+                  - "[BODY].environment == production"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: vaultwarden
+                <<: *defaults-apps
+                url: "https://vaultwarden.${BASE_DOMAIN_EXT}/api/alive"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "has([BODY]) == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: lldap
+                <<: *defaults-apps
+                url: "https://lldap.${BASE_DOMAIN}"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+
+              ## dns
+              - name: pihole-dns
+                <<: *defaults-dns
+                url: "10.242.1.53:53"
+              - name: pihole-valledan-dns
+                <<: *defaults-dns
+                url: "10.242.1.4:53"
+              - name: pihole-kindath-dns
+                <<: *defaults-dns
+                url: "10.242.1.6:53"
+              - name: pihole-valledan-web
+                group: dns
+                url: "https://valledan.${BASE_DOMAIN}/api/info/login"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].dns == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+                alerts:
+                  - type: ntfy
+              - name: pihole-kindath-web
+                group: dns
+                url: "https://kindath.${BASE_DOMAIN}/api/info/login"
+                interval: 5m
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].dns == true"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+                alerts:
+                  - type: ntfy
+
+              ## ups
+              - name: nut-pluto
+                <<: *defaults-ups
+                url: "tcp://10.242.1.242:3493"
+              - name: nut-valledan
+                <<: *defaults-ups
+                url: "tcp://10.242.1.4:3493"
+              
+              ## pluto
+              - name: pluto-web
+                <<: *defaults-pluto
+                url: "https://pluto.${BASE_DOMAIN}"
+              - name: kerberos-web
+                <<: *defaults-pluto
+                url: "https://kerberos.${BASE_DOMAIN}"
+
+              ## machines
+              - name: brother-printer
+                group: machines
+                url: "http://brother-printer.${BASE_DOMAIN}/general/status.html"
+                interval: 10m
+                conditions:
+                  - "[STATUS] == 200"
+                alerts:
+                  - type: ntfy
+
+              ## network
+              - name: hue-hub
+                <<: *defaults-network
+                url: "http://10.242.20.64"
+              - name: vonage-hub
+                <<: *defaults-network
+                url: "http://10.242.20.146"
+              - name: mercury-web
+                <<: *defaults-network
+                url: "https://mercury.${BASE_DOMAIN}"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: venus-web
+                <<: *defaults-network
+                url: "https://venus.${BASE_DOMAIN}"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
+
+            external-endpoints:
+              - name: minecraft-bedrock-ext
+                group: apps-hydra
+                token: "${GATUS_EXT_MINECRAFT_BEDROCK_TOKEN}"
+                heartbeat:
+                  interval: 7m
+                alerts:
+                  - type: ntfy
+              - name: minecraft-mussoncraft-ext
+                group: apps-hydra
+                token: "${GATUS_EXT_MUSSONCRAFT_TOKEN}"
+                heartbeat:
+                  interval: 7m
+                alerts:
+                  - type: ntfy
+              - name: brennin
+                group: machines
+                token: "${GATUS_EXT_BRENNIN_TOKEN}"
+                heartbeat:
+                  interval: 5m
+                alerts:
+                  - type: ntfy
+
+            connectivity:
+              checker:
+                target: 1.1.1.1:53
+                interval: 60s
