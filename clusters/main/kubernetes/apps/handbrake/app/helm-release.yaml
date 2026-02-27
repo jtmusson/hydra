@@ -1,0 +1,103 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: handbrake
+  namespace: handbrake
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: handbrake
+      version: 26.4.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    handbrake:
+      AUTOMATED_CONVERSION_FORMAT: mkv
+      AUTOMATED_CONVERSION_KEEP_SOURCE: false
+      AUTOMATED_CONVERSION_NON_VIDEO_FILE_ACTION: ignore
+      AUTOMATED_CONVERSION_PRESET: General/HQ 1080p30 Surround Subtitles QSV
+      KEEP_APP_RUNNING: true
+      SECURE_CONNECTION: false
+      DARK_MODE: true
+    persistence:
+      config:
+        volsync:
+          - name: config-1
+            type: restic
+            credentials: backblaze
+            dest:
+              enabled: true
+            src:
+              enabled: true
+      output:
+        path: /mnt/pool0/movies/_Pending
+        server: "${PLUTO_IP}"
+        type: nfs
+      watch:
+        enabled: true
+        path: /mnt/pool0/movies/_MKV
+        server: "${PLUTO_IP}"
+        type: nfs
+        mountPath: "/watch"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        annotations:
+          nginx.ingress.kubernetes.io/whitelist-source-range: ${WHITELIST_IP_RANGE},${PODNET}
+        hosts:
+          - host: handbrake.${BASE_DOMAIN}
+        integrations:
+          enabled: true
+          certManager:
+            certificateIssuer: "cloudflare-prod"
+            enabled: true
+          traefik:
+            enabled: false
+          homepage:
+            enabled: true
+            group: "Ripping"
+            widget:
+              enabled: false
+    workload:
+      main:
+        podSpec:      
+          containers:
+            main:
+              resources:
+                limits:
+                  gpu.intel.com/i915: 1
+                  cpu: 4000m
+                  memory: 20Gi
+                requests:
+                  gpu.intel.com/i915: 1
+                  cpu: 25m
+              env:
+                INSTALL_PACKAGES: curl
