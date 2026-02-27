@@ -1,0 +1,163 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: nextcloud
+      version: 40.12.3
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 45m # increase to 30m on restore
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 50m
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        name: backblaze
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    cnpg:
+      main:
+        cluster:
+          singleNode: true
+        mode: recovery
+        backups:
+          enabled: true
+          credentials: backblaze
+          # revision: "3"
+          retentionPolicy: "14d"
+        recovery:
+          method: object_store
+          # revision: "2"
+          credentials: backblaze
+        database: "nextcloud"
+        password: "${NEXTCLOUD_CNPG_PASSWORD}"
+        user: "nextcloud"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: external
+        hosts:
+          - host: nc.${BASE_DOMAIN_EXT}
+            # paths is required for nextcloud, will 404 if not present
+            paths:
+              - path: /
+                pathType: Prefix
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: Productivity
+            widget:
+              custom:
+                key: "${NEXTCLOUD_API_KEY}"
+              customkv:
+                - key: fields
+                  value: '["freespace", "activeusers"]'
+          traefik:
+            enabled: false
+    nextcloud:
+      clamav:
+        enabled: false
+        infected_action: only_log
+      collabora:
+        enabled: true
+        password: "${COLLABORA_ADMIN_PASS}"
+      credentials:
+        initialAdminPassword: "${NEXTCLOUD_INITIAL_ADMIN_PASSWORD}"
+        initialAdminUser: admin
+      general:
+        accessIP: "${NGINX_EXTERNAL_IP}"
+        default_phone_region: GB
+      php:
+        memory_limit: 8G
+    persistence:
+      config:
+        enabled: true
+        volsync:
+          - name: config-1
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true
+              cacheCapacity: 10Gi
+            src:
+              enabled: true
+              cacheCapacity: 10Gi
+      data:
+        enabled: true
+        path: "/mnt/pool0/nextcloud/nextcloud-data"
+        server: "${PLUTO_IP}"
+        type: nfs
+      html:
+        enabled: true
+        volsync:
+          - name: html-4
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true # set to true on restore from backup
+              cacheCapacity: 10Gi
+            src:
+              enabled: true
+              cacheCapacity: 10Gi
+              trigger:
+                schedule: 10 0 * * *
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              resources:
+                limits:
+                  cpu: 1000m
+                  memory: 8Gi
+                requests:
+                  cpu: 50m
+      imaginary:
+        podSpec:
+          hostUsers: true
+      collabora:
+        podSpec:
+          containers:
+            collabora:
+              resources:
+                limits:
+                  cpu: 1000m
+                requests:
+                  cpu: 100m
+      nextcloud-cron:
+        podSpec:
+          containers:
+            nextcloud-cron:
+              resources:
+                limits:
+                  memory: 4Gi

@@ -20,3 +20,5 @@ resources:
   - mussoncraft/ks.yaml
   - n8n/ks.yaml
   - nebula-sync/ks.yaml
+  - nextcloud/ks.yaml
+  - ntfy/ks.yaml
