@@ -1,0 +1,82 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nebula-sync
+  namespace: nebula-sync
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: nebula-sync
+      version: 0.16.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 25m
+    podOptions:
+      hostUsers: true
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        hosts:
+          - host: nebula-sync.${BASE_DOMAIN}
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: false
+          traefik:
+            enabled: false
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                # Sync configuration
+                PRIMARY: "https://${PIHOLE_1_HOST}|${PIHOLE_1_PASSWORD}"
+                REPLICAS: "https://${PIHOLE_2_HOST}|${PIHOLE_2_PASSWORD}"
+                FULL_SYNC: false # if set to false, enable and select keys below
+                RUN_GRAVITY: false
+                CRON: "*/23 * * * *"
+                CLIENT_SKIP_TLS_VERIFICATION: true
+                # Sync CONFIG options
+                SYNC_CONFIG_DNS: true
+                SYNC_CONFIG_DHCP: false
+                SYNC_CONFIG_NTP: true
+                SYNC_CONFIG_RESOLVER: true
+                SYNC_CONFIG_DATABASE: true
+                SYNC_CONFIG_MISC: true
+                SYNC_CONFIG_DEBUG: false
+                SYNC_CONFIG_DNS_EXCLUDE: "upstreams"
+                # Sync GRAVITY options
+                SYNC_GRAVITY_DHCP_LEASES: false
+                SYNC_GRAVITY_GROUP: true
+                SYNC_GRAVITY_AD_LIST: true
+                SYNC_GRAVITY_AD_LIST_BY_GROUP: true
+                SYNC_GRAVITY_DOMAIN_LIST: true
+                SYNC_GRAVITY_DOMAIN_LIST_BY_GROUP: true
+                SYNC_GRAVITY_CLIENT: true
+                SYNC_GRAVITY_CLIENT_BY_GROUP: true

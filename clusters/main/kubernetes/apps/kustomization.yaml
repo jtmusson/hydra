@@ -18,3 +18,5 @@ resources:
   - minecraft-bedrock/ks.yaml
   - mosquitto/ks.yaml
   - mussoncraft/ks.yaml
+  - n8n/ks.yaml
+  - nebula-sync/ks.yaml

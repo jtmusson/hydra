@@ -1,0 +1,140 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: n8n
+  namespace: n8n
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: n8n
+      version: 18.15.3
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 30m # increase to 20m on restore
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 10m
+    image:
+      repository: ghcr.io/n8n-io/n8n
+      tag: stable@sha256:fdf1e22bc04a03e38da41da5a56ba9b9a48510f480874290ea9c180844cbdb0c
+    deployment:
+      N8N_HOST: n8n.${BASE_DOMAIN} # ensure ingress.main.hosts and below are updated
+      N8N_EDITOR_BASE_URL: https://n8n.${BASE_DOMAIN}/
+      N8N_HIRING_BANNER_ENABLED: false
+    endpoints:
+      WEBHOOK_URL: n8n-hooks.${BASE_DOMAIN_EXT}
+    usermanagement:
+      N8N_EMAIL_MODE: "smtp"
+      N8N_SMTP_HOST: "${SMTP_SERVER}"
+      N8N_SMTP_PORT: "${SMTP_PORT}"
+      N8N_SMTP_USER: "${N8N_EMAIL_HOST_USER}"
+      N8N_SMTP_PASS: "${N8N_EMAIL_HOST_PASSWORD}"
+      N8N_SMTP_SENDER: "${N8N_EMAIL_HOST_USER}"
+      N8N_SMTP_SSL: true
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        name: backblaze
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: external
+        annotations:
+          nginx.ingress.kubernetes.io/whitelist-source-range: ${WHITELIST_IP_RANGE},${PODNET}
+        hosts:
+          - host: n8n.${BASE_DOMAIN} # ensure N8N_HOST is updated
+          - host: n8n-hooks.${BASE_DOMAIN_EXT} # ensure WEBHOOK_URL is updated
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: Developer
+            widget:
+              enabled: false
+          traefik:
+            enabled: false
+    cnpg:
+      main:
+        cluster:
+          singleNode: true
+        mode: recovery # change to `standalone` on new install
+        backups:
+          enabled: true
+          credentials: backblaze
+          # revision: "2"
+          retentionPolicy: "14d"
+        recovery:
+          # revision: "1"
+          credentials: backblaze
+    persistence:
+      data:
+        enabled: true
+        volsync:
+          - name: data-2
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true
+              cacheCapacity: 10Gi
+            src:
+              enabled: true
+              cacheCapacity: 10Gi
+      paperless-ngx-brother-printer:
+        enabled: true
+        mountPath: "/mnt/paperless-ngx-brother-printer"
+        path: "/mnt/pool0/paperless-ngx/paperless-ngx-brother-printer"
+        server: "${PLUTO_IP}"
+        type: nfs
+      brother-printer-receipts:
+        enabled: true
+        mountPath: "/mnt/brother-printer-receipts"
+        path: "/mnt/pool0/brother-printer/brother-printer-receipts"
+        server: "${PLUTO_IP}"
+        type: nfs
+      movies:
+        enabled: true
+        mountPath: "/mnt/movies"
+        path: "/mnt/pool0/movies/"
+        server: "${PLUTO_IP}"
+        type: nfs
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                GENERIC_TIMEZONE: "Europe/London"
+                N8N_RUNNERS_ENABLED: true
+                N8N_SKIP_AUTH_ON_OAUTH_CALLBACK: false
+                N8N_VERSION_NOTIFICATIONS_ENABLED: false
+                N8N_BLOCK_FILE_ACCESS_TO_N8N_FILES: true
+                N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: true
+                N8N_LOG_LEVEL: info
+                N8N_RESTRICT_FILE_ACCESS_TO: "/mnt/paperless-ngx-brother-printer;/mnt/brother-printer-receipts;/mnt/movies"
+                NODES_EXCLUDE: "[]"
