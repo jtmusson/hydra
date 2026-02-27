@@ -15,6 +15,7 @@ resources:
   - linkwarden/ks.yaml
   - lldap/ks.yaml
   - makemkv/ks.yaml
+  - metube/ks.yaml
   - minecraft-bedrock/ks.yaml
   - mosquitto/ks.yaml
   - mussoncraft/ks.yaml
