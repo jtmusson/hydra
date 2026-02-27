@@ -1,0 +1,112 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vaultwarden
+  namespace: vaultwarden
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: vaultwarden
+      version: 29.17.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m # increase to 20m on restore
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 10m
+    vaultwarden:
+      signupDomains:
+        - musson.uk
+      verifySignup: true
+      requireEmail: true
+      showPasswordHint: false
+      hibpApiKey: "${VAULTWARDEN_HIBP_API_KEY}"
+      smtp:
+        enabled: true
+        security: "force_tls"
+        host: "${SMTP_SERVER}"
+        from: "${VAULTWARDEN_EMAIL_HOST_USER}"
+        port: "${SMTP_PORT}"
+        user: "${VAULTWARDEN_EMAIL_HOST_USER}"
+        password: "${VAULTWARDEN_EMAIL_HOST_PASSWORD}"
+      yubico:
+        enabled: true
+        clientId: "${VAULTWARDEN_YUBICO_CLIENT_ID}"
+        secretKey: "${VAULTWARDEN_YUBICO_SECRET_KEY}"
+      push:
+        enabled: true
+        installationId: "${VAULTWARDEN_PUSH_INSTALLATION_ID}"
+        installationKey: "${VAULTWARDEN_PUSH_INSTALLATION_KEY}"
+      log:
+        level: "info"
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        name: backblaze
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: external
+        annotations:
+          nginx.ingress.kubernetes.io/whitelist-source-range: ${WHITELIST_IP_RANGE},${PODNET}
+        hosts:
+          - host: vaultwarden.${BASE_DOMAIN_EXT}
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: Developer
+            widget:
+              enabled: false
+          traefik:
+            enabled: false
+    cnpg:
+      main:
+        cluster:
+          singleNode: true
+        mode: recovery # change to `standalone` on initial install
+        backups:
+          enabled: true
+          credentials: backblaze
+          retentionPolicy: "14d"
+        recovery:
+          credentials: backblaze
+    persistence:
+      data:
+        enabled: true
+        volsync:
+          - name: data
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true
+              cacheCapacity: 10Gi
+            src:
+              enabled: true
+              cacheCapacity: 10Gi

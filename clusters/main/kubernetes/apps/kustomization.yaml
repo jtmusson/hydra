@@ -27,3 +27,4 @@ resources:
   - shlink/ks.yaml
   - shlink-web-client/ks.yaml
 # - tududi/ks.yaml
+  - vaultwarden/ks.yaml
