@@ -73,10 +73,10 @@ spec:
             credentials: backblaze
             type: restic
             dest:
-              enabled: true # change to true on restore
+              enabled: false # change to true on restore
               cacheCapacity: 10Gi
             src:
-              enabled: true # change to true when prod
+              enabled: true
               cacheCapacity: 10Gi
       backend-uploads:
         enabled: true
@@ -86,10 +86,10 @@ spec:
             credentials: backblaze
             type: restic
             dest:
-              enabled: true # change to true on restore
+              enabled: false # change to true on restore
               cacheCapacity: 10Gi
             src:
-              enabled: true # change to true when prod
+              enabled: true
               cacheCapacity: 10Gi
     redis:
       enabled: false
