@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webhook-receiver
+  namespace: flux-system
+  annotations:
+      cert-manager.io/cluster-issuer: cloudflare-prod
+      cert-manager.io/private-key-rotation-policy: Always
+      nginx.ingress.kubernetes.io/whitelist-source-range: 192.30.252.0/22,185.199.108.0/22,140.82.112.0/20,143.55.64.0/20,2a0a:a440::/29,2606:50c0::/32
+spec:
+  ingressClassName: external
+  rules:
+  - host: flux-webhook.${BASE_DOMAIN_EXT}
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: webhook-receiver
+            port:
+              number: 80
+  tls:
+    - hosts:
+      - flux-webhook.${BASE_DOMAIN_EXT}
+      secretName: flux-webhook-tls-0
