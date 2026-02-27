@@ -1,0 +1,133 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: home-assistant
+      version: 29.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 45m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 50m
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        name: backblaze
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    addons:
+      codeserver:
+        enabled: true # change to 'true' when codeserver needed
+        ingress:
+          enabled: true
+          ingressClassName: internal
+          annotations:
+            nginx.ingress.kubernetes.io/whitelist-source-range: ${WHITELIST_IP_RANGE}
+          hosts:
+            - host: hass-vs.${BASE_DOMAIN}
+              path:
+                - path: /
+                  pathType: Prefix
+          integrations:
+            certManager:
+              enabled: true
+              certificateIssuer: cloudflare-prod
+            traefik:
+              enabled: false
+    cnpg:
+      main:
+        cluster:
+          singleNode: true
+        mode: recovery
+        backups:
+          enabled: true
+          credentials: backblaze
+          # revision: "2"
+          retentionPolicy: "14d"
+        recovery:
+          method: object_store
+          # revision: "1"
+          credentials: backblaze
+        database: "home-assistant"
+        password: "PLACEHOLDERPASSWORD"
+        user: "home-assistant"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: external
+        hosts:
+          - host: hass.${BASE_DOMAIN_EXT}
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: "Smart home"
+            widget:
+              custom:
+                key: ${HOMEASSISTANT_API_KEY}
+              customkv:
+                - key: fields
+                  value: '["people_home", "lights_on"]'
+              enabled: true
+          traefik:
+            enabled: false
+    persistence:
+      config:
+        enabled: true
+        volsync:
+          - name: app-config-1
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true
+              cacheCapacity: 10Gi
+            src:
+              enabled: true
+              cacheCapacity: 10Gi
+      backup:
+        enabled: true
+        path: "/mnt/pool0/archive/jtmusson/Backups/Backup—Home Assistant/backups"
+        server: "${PLUTO_IP}"
+        type: nfs
+        mountPath: "/config/backups"
+    service:
+      main:
+        enabled: true
+        loadBalancerIP: "${HASS_IP}"
+        type: LoadBalancer
+        integrations:
+          metallb:
+            enabled: true
+    homeassistant:
+      trusted_proxies:
+        - ${PODNET}
+        - ${SVCNET}

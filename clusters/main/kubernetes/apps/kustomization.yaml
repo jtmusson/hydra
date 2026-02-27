@@ -6,4 +6,5 @@ resources:
   - external-dns/ks.yaml
   - gatus/ks.yaml
   - handbrake/ks.yaml
+  - home-assistant/ks.yaml
   - kubernetes-dashboard/ks.yaml
