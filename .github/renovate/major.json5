@@ -1,0 +1,11 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "major": {
+      "description": ["Create major branches at any time, without dashboard approval, with automerge disabled"],
+      "enabled": true,
+      "automerge": false,
+      "dependencyDashboardApproval": false,
+      "schedule": ["* * * * *"]
+    },
+    "separateMultipleMajor": true
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "github>trueforge-org/truecharts//.github/renovate/main.json5",
+    "github>jtmusson/hydra-cluster//.github/renovate/disable-these.json5",
+    "github>jtmusson/hydra-cluster//.github/renovate/kubectl.json5",
+    "github>jtmusson/hydra-cluster//.github/renovate/major.json5",
+    "github>jtmusson/hydra-cluster//.github/renovate/minecraft-bedrock.json5",
+    "github>jtmusson/hydra-cluster//.github/renovate/schedules.json5"
+  ],
+  "timezone": "Europe/London",
+  "schedule": ["* 0-5 * * *"] // Set effective default branch creation schedule to 0-5 daily
+}

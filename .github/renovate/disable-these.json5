@@ -1,0 +1,10 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "packageRules": [
+        {
+            "description": ["Disable matching for helm-values to prevent duplication"],
+            "matchManagers": ["helm-values"],
+            "enabled": false
+        }
+    ]
+}
