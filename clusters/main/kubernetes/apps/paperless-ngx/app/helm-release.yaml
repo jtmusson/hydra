@@ -1,0 +1,125 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: paperless-ngx
+  namespace: paperless-ngx
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: paperless-ngx
+      version: 11.43.2
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 45m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 25m
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        name: backblaze
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    cnpg:
+      main:
+        cluster:
+          singleNode: true
+        mode: recovery # set to `recovery` on restore
+        backups:
+          enabled: true
+          credentials: backblaze
+          retentionPolicy: "7d"
+        recovery:
+          credentials: backblaze
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        hosts:
+          - host: "paperless-ngx.${BASE_DOMAIN}"
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: Productivity
+            widget:
+              custom:
+                key: "${PAPERLESS_API_KEY}"
+              enabled: true
+          traefik:
+            enabled: false
+    persistence:
+      consume:
+        enabled: true
+        mountPath: "/consume"
+        path: "/mnt/pool0/paperless-ngx/paperless-ngx-import"
+        server: "${PLUTO_IP}"
+        type: nfs
+      data:
+        enabled: true
+        mountPath: "/data"
+        volsync:
+          - name: data-2
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true
+              cacheCapacity: 10Gi
+            src:
+              enabled: true
+              cacheCapacity: 10Gi
+      media:
+        enabled: true
+        mountPath: "/media"
+        path: "/mnt/pool0/paperless-ngx/paperless-ngx-data"
+        server: "${PLUTO_IP}"
+        type: nfs
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                PAPERLESS_ADMIN_MAIL: "${PAPERLESS_ADMIN_MAIL}"
+                PAPERLESS_ADMIN_PASSWORD: "${PAPERLESS_ADMIN_PASSWORD}"
+                PAPERLESS_ADMIN_USER: "admin"
+                PAPERLESS_CONSUMER_POLLING: "120"
+                PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE: true
+                PAPERLESS_OCR_LANGUAGE: "eng"
+                PAPERLESS_OCR_LANGUAGES: "eng fra deu"
+                PAPERLESS_WORKER_TIMEOUT: "300"
+                PAPERLESS_URL: "https://paperless-ngx.${BASE_DOMAIN}"
+                PAPERLESS_CSRF_TRUSTED_ORIGINS: "https://*.${BASE_DOMAIN}, https://*.${BASE_DOMAIN_EXT}"
+                PAPERLESS_EMAIL_HOST: "${SMTP_SERVER}"
+                PAPERLESS_EMAIL_PORT: "${SMTP_PORT}"
+                PAPERLESS_EMAIL_HOST_USER: "${PAPERLESS_EMAIL_HOST_USER}"
+                PAPERLESS_EMAIL_HOST_PASSWORD: "${PAPERLESS_EMAIL_HOST_PASSWORD}"
+                PAPERLESS_EMAIL_USE_SSL: true
+              resources:
+                limits:
+                  memory: 5Gi
+                  cpu: 2000m

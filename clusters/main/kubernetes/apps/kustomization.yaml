@@ -22,3 +22,4 @@ resources:
   - nebula-sync/ks.yaml
   - nextcloud/ks.yaml
   - ntfy/ks.yaml
+  - paperless-ngx/ks.yaml
