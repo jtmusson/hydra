@@ -1,0 +1,116 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: jellyfin
+      version: 22.5.2
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 30m # set to at least 20m on restore
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 50m
+        ephemeral-storage: 10Gi
+      limits:
+        memory: 5Gi
+        ephemeral-storage: 25Gi
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        hosts:
+          - host: jellyfin.${BASE_DOMAIN}
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: Media
+            widget:
+              custom:
+                key: "${JELLYFIN_API_KEY}"
+              customkv:
+                - key: enableBlocks
+                  value: "true"
+                - key: enableMediaControl
+                  value: "false"
+                - key: enableUser
+                  value: "true"
+                - key: showEpisodeNumber
+                  value: "true"
+                - key: expandOneStreamToTwoRows
+                  value: "false"
+              enabled: true
+          traefik:
+            enabled: false
+    persistence:
+      config:
+        enabled: true
+        volsync:
+          - name: config-3
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true # ensure this is set to "true" before attempting restore
+            src:
+              enabled: true
+              trigger:
+                schedule: 30 0 * * *
+      data:
+        enabled: false
+      movies:
+        enabled: true
+        mountPath: "/mnt/movies"
+        path: "/mnt/pool0/movies"
+        server: "${PLUTO_IP}"
+        readOnly: false
+        type: nfs 
+      transcode:
+        size: 25Gi
+    workload:
+      main:
+        podSpec:      
+          containers:
+            main:
+              resources:
+                limits:
+                  gpu.intel.com/i915: 1
+                requests:
+                  gpu.intel.com/i915: 1
+              env:
+                JELLYFIN_DATA_DIR: /config
+                JELLYFIN_CONFIG_DIR: /config/config
+                # JELLYFIN_LOG_DIR: /config/log
+                # JELLYFIN_CACHE_DIR: /cache

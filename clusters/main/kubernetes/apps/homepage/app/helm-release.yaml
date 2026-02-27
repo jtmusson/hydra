@@ -1,0 +1,100 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: homepage
+  namespace: homepage
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: homepage
+      version: 11.22.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 10m
+    addons:
+      codeserver:
+        enabled: true # change to 'true' when codeserver needed
+        service:
+          ports:
+            codeserver:
+              port: 12321
+          type: ClusterIP
+        ingress:
+          enabled: true
+          ingressClassName: internal
+          annotations:
+            nginx.ingress.kubernetes.io/whitelist-source-range: ${WHITELIST_IP_RANGE}
+          hosts:
+            - host: homepage-vs.${BASE_DOMAIN}
+              path:
+                - path: /
+                  pathType: Prefix
+          integrations:
+            certManager:
+              enabled: true
+              certificateIssuer: cloudflare-prod
+            traefik:
+              enabled: false
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    forceConfigFromValues: false
+    persistence:
+      config:
+        volsync:
+          - name: config-1
+            type: restic
+            credentials: backblaze
+            dest:
+              enabled: true
+            src:
+              enabled: true
+    service:
+      main:
+        type: ClusterIP
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        hosts:
+          - host: homepage.${BASE_DOMAIN}
+        integrations:
+          certManager:
+            certificateIssuer: "cloudflare-prod"
+            enabled: true
+          traefik:
+            enabled: false
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                HOMEPAGE_ALLOWED_HOSTS: "homepage.${BASE_DOMAIN}"
