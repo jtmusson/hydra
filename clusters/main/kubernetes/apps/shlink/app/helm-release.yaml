@@ -1,0 +1,87 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: shlink
+  namespace: shlink
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: shlink
+      version: 19.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    image:
+      repository: ghcr.io/shlinkio/shlink
+      tag: 5.0.0@sha256:5bbedb6913b951f23428a61b581e7a22e33bdda0446455dfb4a598e57f15ff73
+    resources:
+      requests:
+        cpu: 25m
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: external
+        hosts:
+          - host: ${SHLINK_DOMAIN_EXT}
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod-muss-uk
+            enabled: true
+          homepage:
+            enabled: true
+            group: "Developer"
+            widget:
+              enabled: false
+          traefik:
+            enabled: false
+    cnpg:
+      main:
+        cluster:
+          singleNode: true
+        mode: recovery # change to `recovery` on restore
+        backups:
+          enabled: true
+          credentials: backblaze
+          retentionPolicy: "14d"
+        recovery:
+          credentials: backblaze
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                DEFAULT_DOMAIN: "${SHLINK_DOMAIN_EXT}"
+                DEFAULT_BASE_URL_REDIRECT: "https://musson.uk"
+                # CORS_ALLOW_ORIGIN: "https://${SHLINK_DOMAIN_EXT}"
+                # CORS_ALLOW_CREDENTIALS: true
+                INITIAL_API_KEY: "${SHLINK_API_KEY}"
+                GEOLITE_LICENSE_KEY: "${GEOLITE_LICENSE_KEY}"
+                DISABLE_TRACKING_FROM: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16" # disable tracking from private IPv4 networks

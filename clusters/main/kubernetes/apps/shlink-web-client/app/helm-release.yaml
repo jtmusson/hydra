@@ -1,0 +1,75 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: shlink-web-client
+  namespace: shlink-web-client
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: shlink-web-client
+      version: 14.19.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    image:
+      repository: ghcr.io/shlinkio/shlink-web-client
+      tag: 4.7.0@sha256:80b4d00c445f61e38164a4f13bea4f915b0bdc051e74705fe21ffa92a3d6fed5
+    resources:
+      requests:
+        cpu: 10m
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        annotations:
+          nginx.ingress.kubernetes.io/whitelist-source-range: ${WHITELIST_IP_RANGE},${PODNET}
+        hosts:
+          - host: shlink-web.${BASE_DOMAIN}
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: "Developer"
+            widget:
+              enabled: false
+          traefik:
+            enabled: false
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                SHLINK_SERVER_URL: https://${SHLINK_DOMAIN_EXT}
+                SHLINK_SERVER_API_KEY: ${SHLINK_API_KEY}
+                SHLINK_SERVER_NAME: ${SHLINK_DOMAIN_EXT}
+                SHLINK_SERVER_FORWARD_CREDENTIALS: false

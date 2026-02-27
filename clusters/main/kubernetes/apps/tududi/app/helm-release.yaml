@@ -1,0 +1,141 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: tududi
+  namespace: tududi
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 15.36.3
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 25m
+    image:
+      repository: docker.io/chrisvel/tududi
+      pullPolicy: IfNotPresent
+      tag: 0.88.5@sha256:d027b5ab6fa5067ba1d42d11e24d4d22f84e1b04f68c99ec49567cc5e2167727
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        hosts:
+          - host: tududi.${BASE_DOMAIN}
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: false
+          traefik:
+            enabled: false
+    service:
+      main:
+        ports:
+          main:
+            port: 3002
+    persistence:
+      backend-db:
+        enabled: true
+        mountPath: "/app/backend/db"
+        volsync:
+          - name: backend-db
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true # change to true on restore
+              cacheCapacity: 10Gi
+            src:
+              enabled: true # change to true when prod
+              cacheCapacity: 10Gi
+      backend-uploads:
+        enabled: true
+        mountPath: "/app/backend/uploads"
+        volsync:
+          - name: backend-uploads
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true # change to true on restore
+              cacheCapacity: 10Gi
+            src:
+              enabled: true # change to true when prod
+              cacheCapacity: 10Gi
+    redis:
+      enabled: false
+    securityContext:
+      container: 
+        runAsUser: 0
+        runAsGroup: 0
+        readOnlyRootFilesystem: false
+        allowPrivilegeEscalation: true
+        # capabilities:
+        #  add:
+        #    - CHOWN
+        #    - FOWNER
+        #    - SYS_CHROOT
+        #    - MKNOD
+      pod:
+        supplementalGroups: [1001]
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              probes:
+                liveness:
+                  type: tcp
+                readiness:
+                  type: tcp
+                startup:
+                  type: tcp
+              env:
+                TUDUDI_USER_EMAIL: "${EMAIL1}"
+                TUDUDI_USER_PASSWORD: "${TUDUDI_USER_PASSWORD}"
+                TUDUDI_SESSION_SECRET: "${TUDUDI_SESSION_SECRET}"
+                TUDUDI_ALLOWED_ORIGINS: "https://tududi.${BASE_DOMAIN}"
+                FRONTEND_URL: "https://tududi.${BASE_DOMAIN}"
+                # RATE_LIMITING_ENABLED: false
+                SWAGGER_ENABLED: true
+                DISABLE_TELEGRAM: true
+                # ENABLE_EMAIL: true
+                # EMAIL_SMTP_HOST: 
+                # EMAIL_SMTP_PORT: 
+                # EMAIL_SMTP_SECURE: 
+                # EMAIL_SMTP_USERNAME: 
+                # EMAIL_SMTP_PASSWORD: 
+                # EMAIL_FROM_ADDRESS:
+                # EMAIL_FROM_NAME:
+                # PUID: "568"
+                # GUID: "568"
+                # DBFILE:
