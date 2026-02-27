@@ -1,0 +1,127 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mussoncraft
+  namespace: mussoncraft
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: minecraft-bedrock
+      version: 13.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false # change to 'true' to stop all pods whenever world maintenance is needed
+    image:
+      repository: ghcr.io/itzg/minecraft-bedrock-server
+      pullPolicy: IfNotPresent
+      tag: 2026.2.1@sha256:f081b6f19dc576518e71764fd80c8a4504ecb0381013e8ed7043c5a5a5fb3095
+    resources:
+      requests:
+        cpu: 50m
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        name: backblaze
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"  
+    persistence:
+      config:
+        enabled: true
+        volsync:
+          - name: config
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true
+            src:
+              enabled: true
+              trigger:
+                schedule: 20 0 * * *
+      worlds:
+        enabled: true
+        path: "/mnt/pool1/minecraft-bedrock/minecraft-bedrock-worlds"
+        server: "${PLUTO_IP}"
+        type: nfs
+        mountPath: "/data/worlds"
+    service:
+      main:
+        enabled: true
+        annotations:
+          external-dns.alpha.kubernetes.io/target: "{{ .Values.service.main.loadBalancerIP }}"
+          external-dns.alpha.kubernetes.io/internal-hostname: "mc-survival.${BASE_DOMAIN_EXT}"
+        loadBalancerIP: "${MUSSONCRAFT_IP}"
+        type: LoadBalancer
+        integrations:
+          metallb:
+            enabled: true
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                # renovate: datasource=custom.minecraft-bedrock depName=minecraft-bedrock
+                VERSION: 1.26.2.1
+                ALLOW_CHEATS: false
+                DIFFICULTY: normal
+                GAMEMODE: survival
+                LEVEL_NAME: "Mussoncraft"
+                ONLINE_MODE: true
+                MAX_PLAYERS: 8
+                MAX_THREADS: 0
+                DEFAULT_PLAYER_PERMISSION_LEVEL: "member"
+                ENABLE_LAN_VISIBILITY: true
+                SERVER_NAME: "Mussoncraft"
+                VIEW_DISTANCE: 32
+                PLAYER_IDLE_TIMEOUT: 0
+                WHITE_LIST: true # set because source chart sets to false otherwise
+                ALLOW_LIST: true
+                ALLOW_LIST_USERS: "${MINECRAFT_ALLOW_LIST_USERS}"
+      mcmonitor-cron:
+        enabled: true # set up token in gatus then change to true
+        type: CronJob
+        schedule: "*/5 * * * *"
+        podSpec:
+          restartPolicy: Never
+          containers:
+            mcmonitor-cron:
+              enabled: true
+              primary: true
+              imageSelector: image
+              resources:
+                excludeExtra: true
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  /usr/local/bin/mc-monitor status-bedrock --host "{{ .Values.service.main.loadBalancerIP }}" --port "{{ .Values.service.main.ports.main.port }}" \
+                  && curl -vs -H "Authorization: Bearer ${GATUS_EXT_MUSSONCRAFT_TOKEN}" -X POST "https://gatus.${BASE_DOMAIN}/api/v1/endpoints/apps-hydra_minecraft-mussoncraft-ext/external?success=true" 2>&1
+              probes:
+                liveness:
+                  enabled: false
+                readiness:
+                  enabled: false
+                startup:
+                  enabled: false
