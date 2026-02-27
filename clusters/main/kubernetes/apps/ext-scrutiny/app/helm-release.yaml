@@ -1,0 +1,53 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ext-scrutiny
+  namespace: ext-scrutiny
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: external-service
+      version: 16.17.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 10m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    resources:
+      requests:
+        cpu: 10m
+    service:
+      main: 
+        type: ExternalIP
+        externalIP: "10.242.1.242"
+        ports:
+          main:
+            protocol: http
+            port: 31054
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        hosts:
+          - host: "scrutiny.${BASE_DOMAIN}"
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          traefik:
+            enabled: false
