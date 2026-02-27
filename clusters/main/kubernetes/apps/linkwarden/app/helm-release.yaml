@@ -1,0 +1,102 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: linkwarden
+  namespace: linkwarden
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: linkwarden
+      version: 7.18.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 30m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 10m
+    config:
+      nextauth_url: "https://linkwarden.${BASE_DOMAIN}/api/v1/auth"
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        name: backblaze
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        hosts:
+          - host: linkwarden.${BASE_DOMAIN} # ensure nextauth_url is updated
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: Productivity
+            widget:
+              enabled: true
+              custom: 
+                key: ${LINKWARDEN_API_KEY}
+          traefik:
+            enabled: false
+    cnpg:
+      main:
+        cluster:
+          singleNode: true
+        mode: recovery # change to `recovery` on restore
+        backups:
+          enabled: true
+          credentials: backblaze
+          retentionPolicy: "14d"
+        recovery:
+          credentials: backblaze
+    persistence:
+      data:
+        enabled: true
+        volsync:
+          - name: data-1
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true # enable on restore
+              cacheCapacity: 10Gi
+            src:
+              enabled: true
+              cacheCapacity: 10Gi
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                NEXT_PUBLIC_DISABLE_REGISTRATION: false
+                NEXT_PUBLIC_CREDENTIALS_ENABLED: true
+                NEXT_PUBLIC_EMAIL_PROVIDER: true
+                EMAIL_FROM: "${LINKWARDEN_EMAIL_HOST_USER}"
+                EMAIL_SERVER: "smtps://linkwarden%40${SMTP_HOST_DOMAIN}:${LINKWARDEN_EMAIL_HOST_PASSWORD}@${SMTP_SERVER}:${SMTP_PORT}"
+                RSS_SUBSCRIPTION_LIMIT_PER_USER: 30
+                MONOLITH_MAX_BUFFER: 1000

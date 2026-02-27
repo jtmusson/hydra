@@ -1,0 +1,94 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: metube
+  namespace: metube
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: metube
+      version: 17.4.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 10m
+        ephemeral-storage: 5Gi
+      limits:
+        ephemeral-storage: 25Gi
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        name: backblaze
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: internal
+        hosts:
+          - host: metube.${BASE_DOMAIN}
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: Ripping
+            widget:
+              enabled: false
+          traefik:
+            enabled: false
+    persistence:
+      config:
+        volsync:
+          - name: config-2
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true
+            src:
+              enabled: true
+      downloads:
+        path: /mnt/pool0/movies/_MakeMKV_Out
+        server: "${PLUTO_IP}"
+        type: nfs
+      tempdir:
+        enabled: true
+        type: emptyDir
+        mountPath: /tempdir
+        size: 25Gi
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                DEFAULT_THEME: "dark"
+                OUTPUT_TEMPLATE: "%(title)s [%(id)s].%(ext)s"
+                YTDL_OPTIONS: '{"ratelimit":20000000,"writesubtitles":true,"subtitleslangs":["en","-live_chat"],"updatetime":false,"postprocessors":[{"key":"FFmpegEmbedSubtitle","already_have_subtitle":false},{"key":"FFmpegMetadata","add_chapters":true}]}'
+                DOWNLOAD_MODE: "sequential"
+                TEMP_DIR: /tempdir

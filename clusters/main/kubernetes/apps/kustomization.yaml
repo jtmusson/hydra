@@ -10,4 +10,8 @@ resources:
   - homepage/ks.yaml
   - it-tools/ks.yaml
   - jellyfin/ks.yaml
+  - jellyseerr/ks.yaml
   - kubernetes-dashboard/ks.yaml
+  - linkwarden/ks.yaml
+  - lldap/ks.yaml
+  - makemkv/ks.yaml

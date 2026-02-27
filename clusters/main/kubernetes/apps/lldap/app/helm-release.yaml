@@ -1,0 +1,113 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: lldap
+  namespace: lldap
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: lldap
+      version: 8.16.1
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts
+        namespace: flux-system
+      interval: 15m
+  timeout: 20m # increase to 20m on restore
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: false
+    resources:
+      requests:
+        cpu: 10m
+    image:
+      repository: ghcr.io/lldap/lldap
+      tag: v0.6.2-debian@sha256:713f8f1c7bb769bdcc7dc86b48838ec23e45ce45ab31d562544959360e96c109
+    credentials:
+      backblaze:
+        accessKey: "${B2_ACCESSKEY}"
+        bucket: "${B2_BUCKET}"
+        encrKey: "${B2_ENCRKEY}"
+        name: backblaze
+        secretKey: "${B2_SECRETKEY}"
+        type: s3
+        url: "${B2_URL}"
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: external
+        annotations:
+          nginx.ingress.kubernetes.io/whitelist-source-range: ${WHITELIST_IP_RANGE},${PODNET}
+        hosts:
+          - host: lldap.${BASE_DOMAIN} # also change LLDAP_HTTP_URL
+        integrations:
+          certManager:
+            certificateIssuer: cloudflare-prod
+            enabled: true
+          homepage:
+            enabled: true
+            group: Developer
+            widget:
+              enabled: false
+          traefik:
+            enabled: false
+    cnpg:
+      main:
+        cluster:
+          singleNode: true
+        mode: recovery # change to `recovery` after install
+        backups:
+          enabled: true
+          credentials: backblaze
+          retentionPolicy: "14d"
+        recovery:
+          credentials: backblaze
+    persistence:
+      data:
+        enabled: true
+        volsync:
+          - name: data
+            credentials: backblaze
+            type: restic
+            dest:
+              enabled: true
+              cacheCapacity: 10Gi
+            src:
+              enabled: true
+              cacheCapacity: 10Gi
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                LLDAP_HTTP_URL: "https://lldap.${BASE_DOMAIN}"
+                LLDAP_LDAP_BASE_DN: "${LLDAP_LDAP_BASE_DOMAIN}"
+                # ADMIN
+                LLDAP_LDAP_USER_DN: "${LLDAP_LDAP_USER_DN}"
+                LLDAP_LDAP_USER_EMAIL: "${LLDAP_LDAP_USER_EMAIL}"
+                LLDAP_LDAP_USER_PASS: "${LLDAP_LDAP_USER_PASSWORD}"
+                # LOGGING
+                LLDAP_VERBOSE: false
+                # SMTP
+                LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET: true # set to true to allow SMTP test only
+                LLDAP_SMTP_OPTIONS__SERVER: "${SMTP_SERVER}"
+                LLDAP_SMTP_OPTIONS__PORT: "${SMTP_PORT}"
+                LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION: "TLS"
+                LLDAP_SMTP_OPTIONS__USER: "${LLDAP_SMTP_OPTIONS__USER}"
+                LLDAP_SMTP_OPTIONS__PASSWORD: "${LLDAP_SMTP_OPTIONS__PASSWORD}"
+                LLDAP_SMTP_OPTIONS__FROM: "${LLDAP_SMTP_OPTIONS__USER}"
+                LLDAP_SMTP_OPTIONS__REPLY_TO: "Do Not Reply <noreply@localhost>"
