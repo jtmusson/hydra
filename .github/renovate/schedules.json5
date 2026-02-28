@@ -5,11 +5,6 @@
             "description": ["Allow github-actions to create branches at any time"],
             "matchManagers": ["github-actions"],
             "schedule": ["* * * * *"]
-        },
-        {
-            "description": ["Allow Kubelet, Talos and kubectl upgrades to create branches at any time"],
-            "matchPackageNames": ["ghcr.io/siderolabs/kubelet", "ghcr.io/siderolabs/installer", "registry.k8s.io/kubectl"],
-            "schedule": ["* * * * *"]
         }
     ]
 }

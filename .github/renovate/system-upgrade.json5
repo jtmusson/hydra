@@ -1,0 +1,12 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "packageRules": [
+        {
+            "description": ["Allow Kubelet, Talos and kubectl upgrades to create branches at any time, separate all versions"],
+            "matchPackageNames": ["ghcr.io/siderolabs/kubelet", "ghcr.io/siderolabs/installer", "registry.k8s.io/kubectl"],
+            "schedule": ["* * * * *"],
+            "separateMajorMinor": true,
+            "separateMinorPatch": true
+        }
+    ]
+}
