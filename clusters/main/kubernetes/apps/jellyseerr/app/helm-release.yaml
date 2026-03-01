@@ -8,8 +8,8 @@ spec:
   interval: 15m
   chart:
     spec:
-      chart: jellyseerr
-      version: 13.16.3
+      chart: seerr
+      version: 14.0.0
       sourceRef:
         kind: HelmRepository
         name: truecharts
@@ -53,6 +53,7 @@ spec:
         hosts:
           - host: media-requests.${BASE_DOMAIN}
           - host: jellyseerr.${BASE_DOMAIN}
+          - host: seerr.${BASE_DOMAIN}
         integrations:
           certManager:
             certificateIssuer: cloudflare-prod
