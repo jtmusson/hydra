@@ -30,6 +30,3 @@ spec:
     configmap:
       dashboard: 
         enabled: false
-    metrics:
-      main:
-        enabled: false
