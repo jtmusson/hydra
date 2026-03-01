@@ -57,3 +57,7 @@ spec:
             enabled: true
           traefik:
             enabled: false
+    configmap:
+      kubernetes-dashboard-settings:
+        data:
+          settings: '{"defaultNamespace":"_all"}'
