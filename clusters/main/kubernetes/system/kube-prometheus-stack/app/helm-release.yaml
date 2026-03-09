@@ -38,6 +38,7 @@ spec:
     alertmanager:
       enabled: false
     kubeEtcd:
+      enabled: false
       service:
         selector:
           component: kube-apiserver
@@ -46,6 +47,7 @@ spec:
     prometheusOperator:
       enabled: false
     prometheus:
+      enabled: false
       ingress:
         enabled: false
       prometheusSpec:
@@ -113,3 +115,35 @@ spec:
       forceDeployDashboards: true
       defaultDashboardsEnabled: true
       forceDeployDatasources: true
+    ## Everything down here, explicitly disables everything except CRDs and grafana dashboards
+    global:
+      rbac:
+        create: false
+    defaultRules:
+      create: false
+    windowsMonitoring:
+      enabled: false
+    prometheus-windows-exporter:
+      prometheus:
+        monitor:
+          enabled: false
+    kubernetesServiceMonitors:
+      enabled: true
+    kubeApiServer:
+      enabled: false
+    kubelet:
+      enabled: false
+    kubeControllerManager:
+      enabled: false
+    coreDns:
+      enabled: false
+    kubeDns:
+      enabled: false
+    kubeScheduler:
+      enabled: false
+    kubeStateMetrics:
+      enabled: false
+    nodeExporter:
+      enabled: false
+    thanosRuler:
+      enabled: false
