@@ -77,7 +77,7 @@ jobs:
   
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Add comment
-        uses: mshick/add-pr-comment@e16b42ec7612462613a3b8d048fc501d89187015 # v3
+        uses: mshick/add-pr-comment@7c1a3a3e5a072270dc21c0639df39ca11e860b2b # v3
         with:
           message-id: "${{ github.event.pull_request.number }}/${{ matrix.paths }}/${{ matrix.resources }}"
           message-failure: Diff was not successful
