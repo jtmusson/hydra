@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: ntfy
-      version: 12.23.2
+      version: 12.24.0
       sourceRef:
         kind: HelmRepository
         name: truecharts
