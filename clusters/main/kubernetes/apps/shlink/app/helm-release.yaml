@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: shlink
-      version: 19.8.5
+      version: 19.8.6
       sourceRef:
         kind: HelmRepository
         name: truecharts
