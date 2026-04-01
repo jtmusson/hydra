@@ -11,5 +11,8 @@
     "github>jtmusson/hydra//.github/renovate/system-upgrade.json5"
   ],
   "timezone": "Europe/London",
-  "schedule": ["* 0-5 * * *"] // Set effective default branch creation schedule to 0-5 daily
+  "schedule": ["* 0-5 * * *"], // Set effective default branch creation schedule to 0-5 daily
+  "ignoreDeps": [
+    "ghcr.io/n8n-io/n8n"
+  ]
 }
