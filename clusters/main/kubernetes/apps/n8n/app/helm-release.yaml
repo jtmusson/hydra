@@ -130,7 +130,6 @@ spec:
             main:
               env:
                 GENERIC_TIMEZONE: "Europe/London"
-                N8N_RUNNERS_ENABLED: true
                 N8N_SKIP_AUTH_ON_OAUTH_CALLBACK: false
                 N8N_VERSION_NOTIFICATIONS_ENABLED: false
                 N8N_BLOCK_FILE_ACCESS_TO_N8N_FILES: true
