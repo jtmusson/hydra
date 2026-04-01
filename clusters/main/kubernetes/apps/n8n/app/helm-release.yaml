@@ -137,3 +137,4 @@ spec:
                 N8N_LOG_LEVEL: info
                 N8N_RESTRICT_FILE_ACCESS_TO: "/mnt/paperless-ngx-brother-printer;/mnt/brother-printer-receipts;/mnt/movies"
                 NODES_EXCLUDE: "[]"
+                N8N_PROXY_HOPS: 1
