@@ -130,6 +130,7 @@ spec:
             main:
               env:
                 GENERIC_TIMEZONE: "Europe/London"
+                N8N_HOST: "n8n.${BASE_DOMAIN}" # ensure ingress.main.hosts is also updated
                 N8N_RUNNERS_ENABLED: true
                 N8N_SKIP_AUTH_ON_OAUTH_CALLBACK: false
                 N8N_VERSION_NOTIFICATIONS_ENABLED: false
