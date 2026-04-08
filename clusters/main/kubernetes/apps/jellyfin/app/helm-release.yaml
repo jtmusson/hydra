@@ -38,6 +38,7 @@ spec:
         memory: 5Gi
         ephemeral-storage: 25Gi
     image:
+      repository: oci.trueforge.org/containerforge/jellyfin
       tag: 10.11.7@sha256:0ae88d548059184b361bf2f59a53f871c6710c73ede44497ea897d4b98f30252
     credentials:
       backblaze:
