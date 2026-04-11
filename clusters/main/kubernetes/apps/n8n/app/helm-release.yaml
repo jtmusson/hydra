@@ -41,7 +41,7 @@ spec:
       N8N_EDITOR_BASE_URL: https://n8n.${BASE_DOMAIN}/
       N8N_HIRING_BANNER_ENABLED: false
     endpoints:
-      WEBHOOK_URL: n8n-hooks.${BASE_DOMAIN_EXT}
+      WEBHOOK_URL: https://n8n-hooks.${BASE_DOMAIN_EXT}/
     usermanagement:
       N8N_EMAIL_MODE: "smtp"
       N8N_SMTP_HOST: "${SMTP_SERVER}"
