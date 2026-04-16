@@ -36,9 +36,6 @@ spec:
         ephemeral-storage: 5Gi
       limits:
         ephemeral-storage: 25Gi
-    image:
-      repository: ghcr.io/alexta69/metube
-      tag: 2026.04.13@sha256:8a363a67e998cf0c3acd120224b59ee2d529a9a5347438eb4e3a177ce143a5bd
     credentials:
       backblaze:
         accessKey: "${B2_ACCESSKEY}"
