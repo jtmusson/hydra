@@ -37,9 +37,6 @@ spec:
       limits:
         memory: 5Gi
         ephemeral-storage: 25Gi
-    image:
-      repository: oci.trueforge.org/containerforge/jellyfin
-      tag: 10.11.8@sha256:a6f1666597046709da7f40fde82afa611f87220f5ef9ce927a301fcd45da1519
     credentials:
       backblaze:
         accessKey: "${B2_ACCESSKEY}"
