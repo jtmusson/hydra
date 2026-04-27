@@ -1,5 +1,5 @@
 machine:
   kubelet:
-    extraArgs:
-      "image-gc-low-threshold": 35
-      "image-gc-high-threshold": 40
+    extraConfig:
+      imageGCLowThresholdPercent: 35
+      imageGCHighThresholdPercent: 40
