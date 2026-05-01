@@ -79,13 +79,13 @@ spec:
       config:
         enabled: true
         volsync:
-          - name: config-3
+          - name: config-4
             credentials: backblaze
             type: restic
             dest:
               enabled: false # ensure this is set to "true" before attempting restore
             src:
-              enabled: false
+              enabled: true
               trigger:
                 schedule: 30 0 * * *
       data:
