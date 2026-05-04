@@ -73,3 +73,4 @@ spec:
             main:
               env:
                 WEB_PORT: '{{ .Values.service.main.ports.main.port }}'
+                AUTH_DISABLED: true
