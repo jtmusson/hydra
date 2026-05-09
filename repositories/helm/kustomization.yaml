@@ -15,6 +15,5 @@ resources:
   - node-feature-discovery.yaml
   - openebs.yaml
   - prometheus-community.yaml
-  - spegel.yaml
   - truecharts.yaml
 # more goes here!
