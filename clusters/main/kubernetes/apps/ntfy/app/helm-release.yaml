@@ -63,13 +63,13 @@ spec:
       config:
         enabled: true
         volsync:
-          - name: config
+          - name: config-1
             credentials: backblaze
             type: restic
             dest:
               enabled: false # enable on restore
             src:
-              enabled: false
+              enabled: true
     service:
       main:
         enabled: true
