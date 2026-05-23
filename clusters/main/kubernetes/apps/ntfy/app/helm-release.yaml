@@ -67,9 +67,9 @@ spec:
             credentials: backblaze
             type: restic
             dest:
-              enabled: true # enable on restore
+              enabled: false # enable on restore
             src:
-              enabled: true
+              enabled: false
     service:
       main:
         enabled: true
