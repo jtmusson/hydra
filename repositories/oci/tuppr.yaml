@@ -13,4 +13,4 @@ spec:
   url: oci://ghcr.io/home-operations/charts/tuppr
   ref:
     # renovate: datasource=docker depName=ghcr.io/home-operations/charts/tuppr
-    tag: 0.1.36
+    tag: 0.1.37
