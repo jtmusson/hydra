@@ -25,7 +25,6 @@
   "rebaseWhen": "conflicted",
   "prHourlyLimit": 0,
   "prConcurrentLimit": 0,
-  "pinDigests": true,
   "separateMinorPatch": true,
   "semanticCommits": "enabled",
   "ignorePaths": [
