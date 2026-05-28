@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended",
     "github>trueforge-org/renovate-config//default.json",
+    "github>jtmusson/hydra//.github/renovate/autoMerge.json5",
     "github>jtmusson/hydra//.github/renovate/disable-these.json5",
     "github>jtmusson/hydra//.github/renovate/kubectl.json5",
     "github>jtmusson/hydra//.github/renovate/major.json5",
