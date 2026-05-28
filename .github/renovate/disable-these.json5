@@ -5,6 +5,11 @@
             "description": ["Disable matching for helm-values to prevent duplication"],
             "matchManagers": ["helm-values"],
             "enabled": false
+        },
+        {
+            "description": ["Disable matching for kubernetes (do not track deps)"],
+            "matchManagers": ["kubernetes"],
+            "enabled": false
         }
     ]
 }
