@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: ["main"]
     paths: ["clusters/main/kubernetes/**"]
-  merge_group:
  
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
