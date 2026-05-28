@@ -37,6 +37,15 @@
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
+    },
+    {
+      "description": ["n8n Group"],
+      "groupName": "n8n",
+      "matchPackagePatterns": ["n8n"],
+      "matchDatasources": ["docker"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
     }
   ]
 }
