@@ -17,5 +17,6 @@
     "**/.archive/**",
     "**/archive/**",
     "**/resources/**"
-  ]
+  ],
+  "ignoreTests": true
 }
