@@ -46,6 +46,15 @@
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
+    },
+    {
+      "description": ["minecraft-bedrock Group"],
+      "groupName": "minecraft-bedrock",
+      "matchPackagePatterns": ["minecraft-bedrock"],
+      "matchDatasources": ["docker"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
     }
   ]
 }
