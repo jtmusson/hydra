@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: minecraft-bedrock
-      version: 14.5.2
+      version: 14.5.3
       sourceRef:
         kind: HelmRepository
         name: truecharts
@@ -33,7 +33,7 @@ spec:
     image:
       repository: ghcr.io/itzg/minecraft-bedrock-server
       pullPolicy: IfNotPresent
-      tag: 2026.5.3@sha256:d0aa4e6726adba217e6a38fcc56320ac948272f06fc21b8a0788dc8f56edaad7
+      tag: 2026.5.4@sha256:f415bdc0e5fcf3526b8557ca3a2fd0ae65d319adc26dda4e266230c8e28407a5
     resources:
       requests:
         cpu: 50m
