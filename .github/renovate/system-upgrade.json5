@@ -3,7 +3,7 @@
     "packageRules": [
         {
             "description": ["Allow Kubelet, Talos and kubectl upgrades to create branches at any time, separate all versions"],
-            "matchPackageNames": ["ghcr.io/siderolabs/kubelet", "ghcr.io/siderolabs/installer", "registry.k8s.io/kubectl"],
+            "matchPackageNames": ["ghcr.io/siderolabs/kubelet", "ghcr.io/siderolabs/installer"],
             "schedule": ["* * * * *"],
             "separateMajorMinor": true,
             "separateMinorPatch": true
