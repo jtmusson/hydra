@@ -8,7 +8,8 @@
     {
       "matchUpdateTypes": ["minor"],
       "matchPackageNames": [
-        "!/siderolabs/"
+        "!/siderolabs/",
+        "!/longhorn/"
       ],
       "automerge": true,
       "addLabels": ["automerge"]  
