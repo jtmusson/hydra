@@ -10,7 +10,8 @@
       "matchPackageNames": [
         "!/siderolabs/",
         "!/fluxcd/",
-        "!/longhorn/"
+        "!/longhorn/",
+        "!/tuppr/"
       ],
       "automerge": true,
       "addLabels": ["automerge"]  
