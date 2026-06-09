@@ -99,6 +99,7 @@ spec:
                 WHITE_LIST: true # set because source chart sets to false otherwise
                 ALLOW_LIST: true
                 ALLOW_LIST_USERS: "${MINECRAFT_ALLOW_LIST_USERS}"
+                CONTENT_LOG_CONSOLE_OUTPUT_ENABLED: true
       mcmonitor-cron:
         enabled: true # set up token in gatus then change to true
         type: CronJob
