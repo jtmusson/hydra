@@ -36,7 +36,7 @@ spec:
     image:
       repository: docker.io/chrisvel/tududi
       pullPolicy: IfNotPresent
-      tag: 1.1.0@sha256:c0954cc6195c797f65d27a2c99df344d5d74b65e3745750a2617c5605287cb5d
+      tag: 1.1.1@sha256:0f13f1ad55ee2587e37e215634a9cbe8f790895a0308e3508ad0da127f3602a1
     credentials:
       backblaze:
         accessKey: "${B2_ACCESSKEY}"
