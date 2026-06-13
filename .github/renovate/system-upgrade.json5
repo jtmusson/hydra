@@ -8,5 +8,12 @@
             "separateMajorMinor": true,
             "separateMinorPatch": true
         }
+    ],
+    "packageRules": [
+        {
+            "description": ["Limit Kubelet version to latest supported"],
+            "matchPackageNames": ["ghcr.io/siderolabs/kubelet"],
+            "allowedVersions": "<=1.36.1"
+        }
     ]
 }
