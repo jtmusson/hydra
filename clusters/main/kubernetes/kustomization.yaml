@@ -7,4 +7,5 @@ resources:
   - flux-system
   - kube-system
   - networking
+  - observability
   - system
