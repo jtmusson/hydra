@@ -249,6 +249,12 @@ spec:
                   - "[STATUS] == 200"
                   - "[BODY].success == true"
                   - "[CERTIFICATE_EXPIRATION] > 48h"
+              - name: headlamp
+                <<: *defaults-apps
+                url: "https://headlamp.${BASE_DOMAIN}"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[CERTIFICATE_EXPIRATION] > 48h"
               - name: home-assistant
                 <<: *defaults-apps
                 url: "tcp://${HASS_IP}:8123"
@@ -278,12 +284,6 @@ spec:
               - name: it-tools
                 <<: *defaults-apps
                 url: "https://it-tools.${BASE_DOMAIN}"
-              - name: kubernetes-dashboard
-                <<: *defaults-apps
-                url: "https://ks.${BASE_DOMAIN}"
-                conditions:
-                  - "[STATUS] == 200"
-                  - "[CERTIFICATE_EXPIRATION] > 48h"
               - name: mosquitto
                 <<: *defaults-apps
                 url: "tcp://${MQTT_IP}:1883"
