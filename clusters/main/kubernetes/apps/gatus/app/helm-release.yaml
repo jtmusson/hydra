@@ -274,9 +274,9 @@ spec:
                   - "[STATUS] == 200"
                   - "[BODY].credentialsEnabled == true"
                   - "[CERTIFICATE_EXPIRATION] > 48h"
-              - name: jellyseerr
+              - name: seerr
                 <<: *defaults-apps
-                url: "https://jellyseerr.${BASE_DOMAIN}/api/v1/status"
+                url: "https://seerr.${BASE_DOMAIN}/api/v1/status"
                 conditions:
                   - "[STATUS] == 200"
                   - "[BODY].restartRequired == false"
