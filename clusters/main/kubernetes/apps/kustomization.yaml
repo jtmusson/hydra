@@ -10,7 +10,6 @@ resources:
   - homepage/ks.yaml
   - it-tools/ks.yaml
   - jellyfin/ks.yaml
-# - jellyseerr/ks.yaml
   - linkwarden/ks.yaml
   - lldap/ks.yaml
   - makemkv/ks.yaml
@@ -24,6 +23,7 @@ resources:
   - ntfy/ks.yaml
   - paperless-ngx/ks.yaml
   - peanut/ks.yaml
+  - seerr/ks.yaml
   - shlink/ks.yaml
   - shlink-web-client/ks.yaml
   - tududi/ks.yaml
