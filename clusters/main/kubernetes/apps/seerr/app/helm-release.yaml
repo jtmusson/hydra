@@ -63,7 +63,7 @@ spec:
             widget:
               type: seerr
               custom:
-                key: "${JELLYSEER_API_KEY}"
+                key: "${SEERR_API_KEY}"
           traefik:
             enabled: false
     persistence:
