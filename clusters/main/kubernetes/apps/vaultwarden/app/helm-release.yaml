@@ -72,7 +72,7 @@ spec:
         enabled: true
         ingressClassName: external
         annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: ${WHITELIST_IP_RANGE},${PODNET}
+          nginx.ingress.kubernetes.io/whitelist-source-range: ${PRIVATE_IP_RANGE},${PODNET}
         hosts:
           - host: vaultwarden.${BASE_DOMAIN_EXT}
         integrations:
