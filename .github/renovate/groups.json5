@@ -30,15 +30,6 @@
       }
     },
     {
-      "description": ["Talos Group"],
-      "groupName": "Talos",
-      "matchPackagePatterns": ["siderolabs/talosctl", "siderolabs/installer"],
-      "matchDatasources": ["docker"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      }
-    },
-    {
       "description": ["n8n Group"],
       "groupName": "n8n",
       "matchPackagePatterns": ["n8n"],
