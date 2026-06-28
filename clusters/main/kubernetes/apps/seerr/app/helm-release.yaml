@@ -64,6 +64,9 @@ spec:
               type: seerr
               custom:
                 key: "${SEERR_API_KEY}"
+              customkv:
+                - key: fields
+                  value: '["pending", "processing", "available"]'
           traefik:
             enabled: false
     persistence:
