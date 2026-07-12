@@ -65,11 +65,11 @@ spec:
           main:
             port: 3002
     persistence:
-      backend-db:
+      db:
         enabled: true
-        mountPath: "/app/backend/db"
+        mountPath: "/app/db"
         volsync:
-          - name: backend-db
+          - name: db
             credentials: backblaze
             type: restic
             dest:
@@ -78,11 +78,11 @@ spec:
             src:
               enabled: true
               cacheCapacity: 10Gi
-      backend-uploads:
+      uploads:
         enabled: true
-        mountPath: "/app/backend/uploads"
+        mountPath: "/app/uploads"
         volsync:
-          - name: backend-uploads
+          - name: uploads
             credentials: backblaze
             type: restic
             dest:
