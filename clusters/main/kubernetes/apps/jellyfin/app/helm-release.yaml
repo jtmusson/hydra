@@ -92,7 +92,7 @@ spec:
         enabled: true
         volsync:
           - name: data
-            credentials: volsync
+            credentials: backblaze
             type: restic
             dest:
               enabled: false # ensure this is set to "true" before attempting restore
