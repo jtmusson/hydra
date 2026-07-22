@@ -89,7 +89,17 @@ spec:
               trigger:
                 schedule: 30 0 * * *
       data:
-        enabled: false
+        enabled: true
+        volsync:
+          - name: data
+            credentials: volsync
+            type: restic
+            dest:
+              enabled: false # ensure this is set to "true" before attempting restore
+            src:
+              enabled: true
+              trigger:
+                schedule: 30 0 * * *
       movies:
         enabled: true
         mountPath: "/mnt/movies"
