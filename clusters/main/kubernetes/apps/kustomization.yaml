@@ -9,7 +9,7 @@ resources:
   - home-assistant/ks.yaml
   - homepage/ks.yaml
   - it-tools/ks.yaml
-  - jellyfin/ks.yaml
+# - jellyfin/ks.yaml
   - linkwarden/ks.yaml
   - lldap/ks.yaml
   - makemkv/ks.yaml
