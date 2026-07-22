@@ -120,7 +120,7 @@ spec:
                 requests:
                   gpu.intel.com/i915: 1
               env:
-                JELLYFIN_DATA_DIR: /config
-                JELLYFIN_CONFIG_DIR: /config/config
+                # JELLYFIN_DATA_DIR: /config
+                # JELLYFIN_CONFIG_DIR: /config/config
                 # JELLYFIN_LOG_DIR: /config/log
                 # JELLYFIN_CACHE_DIR: /cache
