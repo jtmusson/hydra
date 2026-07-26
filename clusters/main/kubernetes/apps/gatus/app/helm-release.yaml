@@ -398,15 +398,14 @@ spec:
                 url: "https://kerberos.${BASE_DOMAIN}"
 
               ## machines
-              - name: brother-printer
-                enabled: false
-                group: machines
-                url: "http://brother-printer.${BASE_DOMAIN}/general/status.html"
-                interval: 10m
-                conditions:
-                  - "[STATUS] == 200"
-                alerts:
-                  - type: ntfy
+              #- name: brother-printer
+                #group: machines
+                #url: "http://brother-printer.${BASE_DOMAIN}/general/status.html"
+                #interval: 10m
+                #conditions:
+                #  - "[STATUS] == 200"
+                #alerts:
+                #  - type: ntfy
 
               ## network
               - name: hue-hub
