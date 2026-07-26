@@ -399,6 +399,7 @@ spec:
 
               ## machines
               - name: brother-printer
+                enabled: false
                 group: machines
                 url: "http://brother-printer.${BASE_DOMAIN}/general/status.html"
                 interval: 10m
