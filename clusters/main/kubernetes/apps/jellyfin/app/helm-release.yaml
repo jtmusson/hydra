@@ -83,7 +83,7 @@ spec:
             credentials: backblaze
             type: restic
             dest:
-              enabled: false # ensure this is set to "true" before attempting restore
+              enabled: true # ensure this is set to "true" before attempting restore
               cacheCapacity: 10Gi
             src:
               enabled: true
@@ -92,7 +92,6 @@ spec:
                 schedule: 30 0 * * *
       data:
         enabled: true
-        # mountPath: /config/data
         volsync:
           - name: data-1
             credentials: backblaze
