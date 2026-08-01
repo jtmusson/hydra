@@ -92,6 +92,7 @@ spec:
                 schedule: 30 0 * * *
       data:
         enabled: true
+        mountPath: /config/data
         volsync:
           - name: data-1
             credentials: backblaze
@@ -124,7 +125,7 @@ spec:
                 requests:
                   gpu.intel.com/i915: 1
               env:
-                # JELLYFIN_DATA_DIR: /config
-                # JELLYFIN_CONFIG_DIR: /config/config
-                # JELLYFIN_LOG_DIR: /config/log
+                JELLYFIN_DATA_DIR: /config/data
+                # JELLYFIN_CONFIG_DIR: /config
+                # JELLYFIN_LOG_DIR: /log
                 # JELLYFIN_CACHE_DIR: /cache
