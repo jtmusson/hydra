@@ -84,20 +84,24 @@ spec:
             type: restic
             dest:
               enabled: false # ensure this is set to "true" before attempting restore
+              cacheCapacity: 10Gi
             src:
               enabled: true
+              cacheCapacity: 10Gi
               trigger:
                 schedule: 30 0 * * *
       data:
         enabled: true
         volsync:
-          - name: data
+          - name: data-1
             credentials: backblaze
             type: restic
             dest:
               enabled: false # ensure this is set to "true" before attempting restore
+              cacheCapacity: 10Gi
             src:
               enabled: true
+              cacheCapacity: 10Gi
               trigger:
                 schedule: 30 0 * * *
       movies:
