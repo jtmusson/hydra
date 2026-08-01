@@ -128,5 +128,5 @@ spec:
               env:
                 # JELLYFIN_DATA_DIR: /config/data
                 # JELLYFIN_CONFIG_DIR: /config
-                # JELLYFIN_LOG_DIR: /config/log
-                # JELLYFIN_CACHE_DIR: /cache
+                JELLYFIN_LOG_DIR: /config/log
+                JELLYFIN_CACHE_DIR: /cache
