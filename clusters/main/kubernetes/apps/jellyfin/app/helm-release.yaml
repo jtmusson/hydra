@@ -113,8 +113,6 @@ spec:
         type: nfs 
       transcode:
         size: 25Gi
-      logs:
-        mountPath: "/config/log"
     workload:
       main:
         podSpec:      
@@ -128,5 +126,5 @@ spec:
               env:
                 JELLYFIN_DATA_DIR: /config/data
                 JELLYFIN_CONFIG_DIR: /config
-                JELLYFIN_LOG_DIR: /config/log
-                JELLYFIN_CACHE_DIR: /cache
+                # JELLYFIN_LOG_DIR: /logs
+                # JELLYFIN_CACHE_DIR: /cache
