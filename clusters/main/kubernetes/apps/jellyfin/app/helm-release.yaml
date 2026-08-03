@@ -90,6 +90,12 @@ spec:
               cacheCapacity: 10Gi
               trigger:
                 schedule: 30 0 * * *
+      backup:
+        enabled: true
+        path: "/mnt/pool0/archive/jtmusson/Backups/Backup—Jellyfin"
+        server: "${PLUTO_IP}"
+        type: nfs
+        mountPath: "/config/data/data/backups"
       data:
         enabled: false
       movies:
