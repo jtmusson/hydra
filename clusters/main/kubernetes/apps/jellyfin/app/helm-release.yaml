@@ -92,7 +92,7 @@ spec:
                 schedule: 30 0 * * *
       backup:
         enabled: true
-        path: "${PATH_BACKUP}/Backups/Backup—Jellyfin"
+        path: "${PATH_ARCHIVE}/Backups/Backup—Jellyfin"
         server: "${PLUTO_IP}"
         type: nfs
         mountPath: "/config/data/data/backups"

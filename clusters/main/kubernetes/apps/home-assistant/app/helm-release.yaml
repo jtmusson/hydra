@@ -115,7 +115,7 @@ spec:
               cacheCapacity: 10Gi
       backup:
         enabled: true
-        path: "${PATH_BACKUP}/Backups/Backup—Home Assistant/backups"
+        path: "${PATH_ARCHIVE}/Backups/Backup—Home Assistant/backups"
         server: "${PLUTO_IP}"
         type: nfs
         mountPath: "/config/backups"
