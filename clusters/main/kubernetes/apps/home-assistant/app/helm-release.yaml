@@ -76,7 +76,7 @@ spec:
           # revision: "1"
           credentials: backblaze
         database: "home-assistant"
-        password: "PLACEHOLDERPASSWORD"
+        password: "${HOMEASSISTANT_CNPG_PASSWORD}"
         user: "home-assistant"
     ingress:
       main:
@@ -115,7 +115,7 @@ spec:
               cacheCapacity: 10Gi
       backup:
         enabled: true
-        path: "/mnt/pool0/archive/jtmusson/Backups/Backup—Home Assistant/backups"
+        path: "${PATH_BACKUP}/Backups/Backup—Home Assistant/backups"
         server: "${PLUTO_IP}"
         type: nfs
         mountPath: "/config/backups"
