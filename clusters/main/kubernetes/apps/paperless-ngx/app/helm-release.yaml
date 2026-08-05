@@ -76,7 +76,7 @@ spec:
       consume:
         enabled: true
         mountPath: "/consume"
-        path: "/mnt/pool0/paperless-ngx/paperless-ngx-import"
+        path: "${PATH_PAPERLESS}/paperless-ngx-import"
         server: "${PLUTO_IP}"
         type: nfs
       data:
@@ -95,7 +95,7 @@ spec:
       media:
         enabled: true
         mountPath: "/media"
-        path: "/mnt/pool0/paperless-ngx/paperless-ngx-data"
+        path: "${PATH_PAPERLESS}/paperless-ngx-data"
         server: "${PLUTO_IP}"
         type: nfs
     workload:
