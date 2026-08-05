@@ -73,7 +73,7 @@ spec:
             src:
               enabled: true
       downloads:
-        path: /mnt/pool0/movies/_MakeMKV_Out
+        path: "${PATH_MOVIES}/_MakeMKV_Out"
         server: "${PLUTO_IP}"
         type: nfs
       tempdir:
