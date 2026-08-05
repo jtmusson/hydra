@@ -61,7 +61,7 @@ spec:
                 schedule: 20 0 * * *
       worlds:
         enabled: true
-        path: "/mnt/pool1/minecraft-bedrock/minecraft-bedrock-worlds"
+        path: "${PATH_MINECRAFT}"
         server: "${PLUTO_IP}"
         type: nfs
         mountPath: "/data/worlds"
