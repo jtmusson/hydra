@@ -57,12 +57,12 @@ spec:
             src:
               enabled: true
       output:
-        path: /mnt/pool0/movies/_Pending
+        path: "${PATH_MOVIES}/_Pending"
         server: "${PLUTO_IP}"
         type: nfs
       watch:
         enabled: true
-        path: /mnt/pool0/movies/_MKV
+        path: "${PATH_MOVIES}/_MKV"
         server: "${PLUTO_IP}"
         type: nfs
         mountPath: "/watch"
