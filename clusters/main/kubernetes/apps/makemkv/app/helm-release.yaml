@@ -75,7 +75,7 @@ spec:
       movies:
         enabled: true
         mountPath: /mnt/movies
-        path: "/mnt/pool0/movies/"
+        path: "${PATH_MOVIES}"
         server: "${PLUTO_IP}"
         type: nfs
     workload:
