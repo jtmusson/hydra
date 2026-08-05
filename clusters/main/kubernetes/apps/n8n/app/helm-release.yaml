@@ -108,19 +108,19 @@ spec:
       paperless-ngx-brother-printer:
         enabled: true
         mountPath: "/mnt/paperless-ngx-brother-printer"
-        path: "/mnt/pool0/paperless-ngx/paperless-ngx-brother-printer"
+        path: "${PATH_PAPERLESS}/paperless-ngx-brother-printer"
         server: "${PLUTO_IP}"
         type: nfs
       brother-printer-receipts:
         enabled: true
         mountPath: "/mnt/brother-printer-receipts"
-        path: "/mnt/pool0/brother-printer/brother-printer-receipts"
+        path: "${PATH_BROTHER_PRINTER}/brother-printer-receipts"
         server: "${PLUTO_IP}"
         type: nfs
       movies:
         enabled: true
         mountPath: "/mnt/movies"
-        path: "/mnt/pool0/movies/"
+        path: "${PATH_MOVIES}"
         server: "${PLUTO_IP}"
         type: nfs
     workload:
