@@ -92,7 +92,7 @@ spec:
                 schedule: 30 0 * * *
       backup:
         enabled: true
-        path: "/mnt/pool0/archive/jtmusson/Backups/Backup—Jellyfin"
+        path: "${PATH_BACKUP}/Backups/Backup—Jellyfin"
         server: "${PLUTO_IP}"
         type: nfs
         mountPath: "/config/data/data/backups"
@@ -101,7 +101,7 @@ spec:
       movies:
         enabled: true
         mountPath: "/mnt/movies"
-        path: "/mnt/pool0/movies"
+        path: "${PATH_MOVIES}"
         server: "${PLUTO_IP}"
         readOnly: false
         type: nfs 
