@@ -116,7 +116,7 @@ spec:
               cacheCapacity: 10Gi
       data:
         enabled: true
-        path: "/mnt/pool0/nextcloud/nextcloud-data"
+        path: "${PATH_NEXTCLOUD}"
         server: "${PLUTO_IP}"
         type: nfs
       html:
