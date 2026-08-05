@@ -103,7 +103,7 @@ spec:
                 # LOGGING
                 LLDAP_VERBOSE: false
                 # SMTP
-                LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET: true # set to true to allow SMTP test only
+                LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET: false # set to true to allow SMTP test only
                 LLDAP_SMTP_OPTIONS__SERVER: "${SMTP_SERVER}"
                 LLDAP_SMTP_OPTIONS__PORT: "${SMTP_PORT}"
                 LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION: "TLS"
