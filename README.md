@@ -1,15 +1,13 @@
-# 🚀 Kubernetes Cluster (ForgeTool)
+# 🚀 Kubernetes Cluster (Clustertool)
 
-This repository contains a Kubernetes cluster bootstrapped with **TrueForge ForgeTool**.
+This repository contains a Kubernetes cluster bootstrapped with **TrueForge Clustertool**.
 
-🌍 **TrueForge** is a community-driven organization building and maintaining awesome open-source projects.  
-Learn more at 👉 https://trueforge.org/
-
-✨ What this repository provides:
+✨ What **TrueForge Clustertool** provides:
 - ⚙️ Bootstraps a **Talos Linux** Kubernetes cluster
 - 🔄 Installs **Flux** for GitOps-based cluster management
 - 📦 Delivers a minimal, reproducible, ready-to-use setup
 
-🎯 The goal is a **simple, GitOps-driven Kubernetes cluster** with minimal manual effort.
+🌍 **TrueForge** is a community-driven organization building and maintaining awesome open-source projects.  
+Learn more at 👉 https://trueforge.org/
 
-**Powered by TrueForge ForgeTool**.
+🎯 The goal is a **simple, GitOps-driven Kubernetes cluster** with minimal manual effort.
