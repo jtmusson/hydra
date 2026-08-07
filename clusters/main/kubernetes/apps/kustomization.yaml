@@ -23,7 +23,7 @@ resources:
   - ntfy/ks.yaml
   - paperless-ngx/ks.yaml
   - peanut/ks.yaml
-# - seerr/ks.yaml
+  - seerr/ks.yaml
   - shlink/ks.yaml
   - shlink-web-client/ks.yaml
   - tududi/ks.yaml
