@@ -36,8 +36,6 @@ spec:
     resources:
       requests:
         cpu: 25m
-    podOptions:
-      hostUsers: true
     credentials:
       backblaze:
         accessKey: "${B2_ACCESSKEY}"
