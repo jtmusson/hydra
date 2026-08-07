@@ -67,6 +67,17 @@ spec:
                   value: '["pending", "processing", "available"]'
           traefik:
             enabled: false
+    cnpg:
+      main:
+        cluster:
+          singleNode: true
+        mode: standalone # change to `recovery` on restore
+        backups:
+          enabled: true
+          credentials: backblaze
+          retentionPolicy: "14d"
+        recovery:
+          credentials: backblaze
     persistence:
       config:
         volsync:
