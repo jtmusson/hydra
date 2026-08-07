@@ -122,3 +122,7 @@ spec:
                 JELLYFIN_CONFIG_DIR: /config
                 # JELLYFIN_LOG_DIR: /logs
                 # JELLYFIN_CACHE_DIR: /cache
+      broadcastproxy:
+        enabled: true
+    autodiscovery:
+      enabled: true
