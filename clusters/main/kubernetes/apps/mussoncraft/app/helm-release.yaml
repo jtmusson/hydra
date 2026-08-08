@@ -83,7 +83,7 @@ spec:
             main:
               env:
                 # renovate: datasource=custom.minecraft-bedrock depName=minecraft-bedrock
-                VERSION: 1.26.40.8
+                VERSION: 1.26.43.1
                 ALLOW_CHEATS: false
                 DIFFICULTY: normal
                 GAMEMODE: survival
