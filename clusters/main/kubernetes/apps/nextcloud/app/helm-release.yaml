@@ -87,7 +87,7 @@ spec:
     nextcloud:
       clamav:
         enabled: true
-        infected_action: only_log
+        infected_action: only_log # change to "delete" to delete infected files automatically
       collabora:
         enabled: true
         password: "${COLLABORA_ADMIN_PASS}"
