@@ -15,7 +15,7 @@ spec:
         name: truecharts
         namespace: flux-system
       interval: 15m
-  timeout: 45m # increase to 30m on restore
+  timeout: 30m # increase to at least 30m on restore
   maxHistory: 3
   install:
     createNamespace: true
@@ -52,11 +52,9 @@ spec:
         backups:
           enabled: true
           credentials: backblaze
-          # revision: "3"
           retentionPolicy: "14d"
         recovery:
           method: object_store
-          # revision: "2"
           credentials: backblaze
         database: "nextcloud"
         password: "${NEXTCLOUD_CNPG_PASSWORD}"
@@ -88,7 +86,7 @@ spec:
             enabled: false
     nextcloud:
       clamav:
-        enabled: false
+        enabled: true
         infected_action: only_log
       collabora:
         enabled: true
