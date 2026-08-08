@@ -127,7 +127,3 @@ spec:
         integrations:
           metallb:
             enabled: true
-    homeassistant:
-      trusted_proxies:
-        - ${PODNET}
-        - ${SVCNET}
