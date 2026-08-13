@@ -3,7 +3,7 @@
   "packageRules": [
     {
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["lldap/lldap"],
+      "matchPackageNames": ["ghcr.io/lldap/lldap"],
       "versioning": "regex:^(?<major>\\d{4})-(?<minor>\\d{2})-(?<patch>\\d{2})-debian$"
     }
   ]
