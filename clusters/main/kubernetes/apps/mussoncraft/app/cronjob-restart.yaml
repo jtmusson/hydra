@@ -95,4 +95,4 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  kubectl rollout restart deployment/mussoncraft -n mussoncraft
+                  kubectl rollout restart deployment/mussoncraft-minecraft-bedrock -n mussoncraft
