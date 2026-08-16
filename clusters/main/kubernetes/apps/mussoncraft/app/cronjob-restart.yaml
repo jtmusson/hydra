@@ -1,0 +1,98 @@
+---
+# Single service account for both the announcement and restart CronJobs
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mussoncraft-restart-robot
+  namespace: mussoncraft
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: mussoncraft-restart-robot
+  namespace: mussoncraft
+rules:
+  # For kubectl rollout restart (restart-mussoncraft CronJob)
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "patch", "list"]
+  # For kubectl exec into the pod (announce-mussoncraft-restart CronJob)
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: mussoncraft-restart-robot
+  namespace: mussoncraft
+subjects:
+  - kind: ServiceAccount
+    name: mussoncraft-restart-robot
+    namespace: mussoncraft
+roleRef:
+  kind: Role
+  name: mussoncraft-restart-robot
+  apiGroup: rbac.authorization.k8s.io
+---
+# Announce the restart to in-game players 10 minutes before
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: announce-mussoncraft-restart
+  namespace: mussoncraft
+spec:
+  schedule: "50 3 * * *"               # 03:50 GMT
+  timeZone: "GMT"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: mussoncraft-restart-robot
+          restartPolicy: OnFailure
+          containers:
+            - name: kubectl
+              image: bitnami/kubectl:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -e
+                  POD=$(kubectl get pod -n mussoncraft \
+                    -l app.kubernetes.io/name=mussoncraft \
+                    -o jsonpath='{.items[0].metadata.name}')
+                  echo "Announcing restart to pod: $POD"
+                  kubectl exec -n mussoncraft "$POD" -c mussoncraft-minecraft-bedrock -- send-command "say Server will restart in 10 minutes. Please get your player to a safe location!"
+---
+# Restart the deployment
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: restart-mussoncraft
+  namespace: mussoncraft
+spec:
+  schedule: "0 4 * * *"                # 04:00 GMT
+  timeZone: "GMT"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: mussoncraft-restart-robot
+          restartPolicy: OnFailure
+          containers:
+            - name: kubectl
+              image: bitnami/kubectl:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  kubectl rollout restart deployment/mussoncraft -n mussoncraft
