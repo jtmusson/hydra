@@ -65,7 +65,7 @@ spec:
                 - |
                   set -e
                   POD=$(kubectl get pod -n mussoncraft \
-                    -l app.kubernetes.io/name=mussoncraft \
+                    -l app.kubernetes.io/instance=mussoncraft \
                     -o jsonpath='{.items[0].metadata.name}')
                   echo "Announcing restart to pod: $POD"
                   kubectl exec -n mussoncraft "$POD" -c mussoncraft-minecraft-bedrock -- send-command "say Server will restart in 10 minutes. Please get your player to a safe location!"
