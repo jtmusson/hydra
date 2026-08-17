@@ -98,10 +98,10 @@ spec:
             main:
               env:
                 HOMEPAGE_ALLOWED_HOSTS: "*"
-            probes:
-              liveness:
-                path: "/api/health"
-              readiness:
-                path: "/api/health"
-              startup:
-                path: "/api/health"
+              probes:
+                liveness:
+                  path: "/api/health"
+                readiness:
+                  path: "/api/health"
+                startup:
+                  path: "/api/health"
