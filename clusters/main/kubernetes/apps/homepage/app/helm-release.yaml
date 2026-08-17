@@ -100,8 +100,8 @@ spec:
                 HOMEPAGE_ALLOWED_HOSTS: "*"
               probes:
                 liveness:
-                  path: "/api/health"
+                  path: "/api/healthcheck"
                 readiness:
-                  path: "/api/health"
+                  path: "/api/healthcheck"
                 startup:
-                  path: "/api/health"
+                  path: "/api/healthcheck"
