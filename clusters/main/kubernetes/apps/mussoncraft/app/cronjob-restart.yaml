@@ -52,7 +52,7 @@ roleRef:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: announce-mussoncraft-restart
+  name: mussoncraft-announce-restart
   namespace: mussoncraft
 spec:
   schedule: "50 5 * * *"
@@ -107,7 +107,7 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: restart-mussoncraft
+  name: mussoncraft-restart
   namespace: mussoncraft
 spec:
   schedule: "0 6 * * *"
