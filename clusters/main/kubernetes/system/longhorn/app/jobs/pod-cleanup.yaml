@@ -39,6 +39,7 @@ spec:
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
+  ttlSecondsAfterFinished: 120
   jobTemplate:
     spec:
       template:
