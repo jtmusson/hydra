@@ -4,3 +4,4 @@ resources:
   - snapshot-cleanup.yaml
   - snapshot-delete.yaml
   - trim.yaml
+  - pod-cleanup.yaml
