@@ -39,7 +39,6 @@ spec:
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
-  ttlSecondsAfterFinished: 120
   jobTemplate:
     spec:
       template:
@@ -57,3 +56,4 @@ spec:
                   echo "Deleting failed pods in longhorn-system..."
                   kubectl -n longhorn-system delete pods --field-selector=status.phase=Failed --ignore-not-found=true
                   echo "Done."
+      ttlSecondsAfterFinished: 120
