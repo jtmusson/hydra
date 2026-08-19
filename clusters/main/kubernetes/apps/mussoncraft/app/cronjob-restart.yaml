@@ -110,7 +110,7 @@ metadata:
   name: mussoncraft-restart
   namespace: mussoncraft
 spec:
-  schedule: "0 6 * * *"
+  schedule: "0 7 * * *"
   timeZone: "Europe/London"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -150,7 +150,7 @@ spec:
 
                   # Check 2: Did the announce job complete successfully?
                   # Look up the announce CronJob's UID, then find its most recent Job
-                  ANNOUNCE_UID=$(kubectl get cronjob announce-mussoncraft-restart \
+                  ANNOUNCE_UID=$(kubectl get cronjob mussoncraft-announce-restart \
                     -n mussoncraft \
                     -o jsonpath='{.metadata.uid}')
 
