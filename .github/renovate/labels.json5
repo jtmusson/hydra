@@ -39,8 +39,7 @@
     },
     {
       "matchPackageNames": ["/siderolabs/"],
-      "addLabels": ["system-upgrade"],
-      "separateMinorPatch": true
+      "addLabels": ["system-upgrade"]
     },
     {
       "matchPackageNames": ["/fluxcd/"],
