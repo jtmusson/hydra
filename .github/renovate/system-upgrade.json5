@@ -1,19 +1,19 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "packageRules": [
-        {
-            "description": ["Allow Kubelet, Talos and kubectl upgrades to create branches at any time, separate all versions"],
-            "matchPackageNames": ["ghcr.io/siderolabs/kubelet", "ghcr.io/siderolabs/installer"],
-            "schedule": ["* * * * *"],
-            "separateMajorMinor": true,
-            "separateMinorPatch": true
-        }
-    ],
-    "packageRules": [
-        {
-            "description": ["Limit Kubelet version to latest supported"],
-            "matchPackageNames": ["ghcr.io/siderolabs/kubelet"],
-            "allowedVersions": "<=1.36.3"
-        }
-    ]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": [
+        "Allow Kubelet, Talos and kubectl upgrades to create branches at any time, separate all versions"
+      ],
+      "matchPackageNames": ["ghcr.io/siderolabs/kubelet", "ghcr.io/siderolabs/installer"],
+      "schedule": ["* * * * *"],
+      "separateMajorMinor": true,
+      "separateMinorPatch": true
+    },
+    {
+      "description": ["Limit Kubelet version to latest supported"],
+      "matchPackageNames": ["ghcr.io/siderolabs/kubelet"],
+      "allowedVersions": "<=1.36.3"
+    }
+  ]
 }
