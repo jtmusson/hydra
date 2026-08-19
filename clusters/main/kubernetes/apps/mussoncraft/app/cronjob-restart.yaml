@@ -78,9 +78,18 @@ spec:
         spec:
           serviceAccountName: mussoncraft-restart-robot
           restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
           containers:
             - name: kubectl
               image: bitnami/kubectl:latest
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
               command:
                 - /bin/sh
                 - -c
@@ -143,9 +152,18 @@ spec:
         spec:
           serviceAccountName: mussoncraft-restart-robot
           restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
           containers:
             - name: kubectl
               image: bitnami/kubectl:latest
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
               command:
                 - /bin/sh
                 - -c
