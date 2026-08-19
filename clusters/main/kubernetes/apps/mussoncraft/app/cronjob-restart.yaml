@@ -1,10 +1,17 @@
 ---
+# ═══════════════════════════════════════════════════════════════════
+# Service Account
+# ═══════════════════════════════════════════════════════════════════
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: mussoncraft-restart-robot
   namespace: mussoncraft
+
 ---
+# ═══════════════════════════════════════════════════════════════════
+# RBAC — shared by both CronJobs
+# ═══════════════════════════════════════════════════════════════════
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -30,10 +37,7 @@ rules:
   - apiGroups: ["batch"]
     resources: ["jobs"]
     verbs: ["get", "list"]
-  # kubectl get cronjob (restart job — lookup announce CronJob UID)
-  - apiGroups: ["batch"]
-    resources: ["cronjobs"]
-    verbs: ["get", "list"]
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -48,7 +52,15 @@ roleRef:
   kind: Role
   name: mussoncraft-restart-robot
   apiGroup: rbac.authorization.k8s.io
+
 ---
+# ═══════════════════════════════════════════════════════════════════
+# Announce CronJob — 05:50 London time
+#
+# Checks if the deployment has been updated since midnight. If not,
+# announces the restart to in-game players. If it has been updated,
+# skips silently (no restart needed, so no warning required).
+# ═══════════════════════════════════════════════════════════════════
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -103,14 +115,24 @@ spec:
                   kubectl exec -n mussoncraft "$POD" -c mussoncraft-minecraft-bedrock -- \
                     send-command "say Server will restart at 04:00"
                   echo "Announcement sent successfully."
+
 ---
+# ═══════════════════════════════════════════════════════════════════
+# Restart CronJob — 06:00 London time
+#
+# Three guards before restarting:
+#   1. Deployment has NOT been updated since midnight (no redundant restart)
+#   2. Announce job exists and completed successfully
+#   3. Announce job completed within the last hour (warning is fresh)
+# If all pass → restart. If any fail → skip with explanation.
+# ═══════════════════════════════════════════════════════════════════
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: mussoncraft-restart
   namespace: mussoncraft
 spec:
-  schedule: "0 7 * * *"
+  schedule: "0 6 * * *"
   timeZone: "Europe/London"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
@@ -131,7 +153,7 @@ spec:
                   set -e
                   export TZ="Europe/London"
 
-                  # Check 1: Has the deployment been updated since midnight?
+                  # ── Guard 1: Has the deployment been updated since midnight? ──
                   NEWEST_RS=$(kubectl get rs -n mussoncraft \
                     -l app.kubernetes.io/instance=mussoncraft \
                     --sort-by=.metadata.creationTimestamp \
@@ -148,24 +170,18 @@ spec:
                     fi
                   fi
 
-                  # Check 2: Did the announce job complete successfully?
-                  # Look up the announce CronJob's UID, then find its most recent Job
-                  ANNOUNCE_UID=$(kubectl get cronjob mussoncraft-announce-restart \
-                    -n mussoncraft \
-                    -o jsonpath='{.metadata.uid}')
-
-                  if [ -z "$ANNOUNCE_UID" ]; then
-                    echo "Announce CronJob not found. Skipping restart (players were not warned)."
-                    exit 0
-                  fi
-
+                  # ── Guard 2: Did the announce job complete successfully? ──
+                  # Find the most recent announce job by name prefix
+                  # (works for both scheduled and manually-triggered jobs)
                   ANNOUNCE_JOB=$(kubectl get job -n mussoncraft \
-                    -l controller-uid="$ANNOUNCE_UID" \
                     --sort-by=.metadata.creationTimestamp \
-                    -o jsonpath='{.items[-1].metadata.name}')
+                    -o name \
+                    | grep 'mussoncraft-announce-restart' \
+                    | tail -1 \
+                    | sed 's|job\.batch/||')
 
                   if [ -z "$ANNOUNCE_JOB" ]; then
-                    echo "No announce job found for CronJob UID $ANNOUNCE_UID. Skipping restart (players were not warned)."
+                    echo "No announce job found. Skipping restart (players were not warned)."
                     exit 0
                   fi
 
@@ -177,7 +193,7 @@ spec:
                     exit 0
                   fi
 
-                  # Check 3: Was the announce job within the last hour?
+                  # ── Guard 3: Was the announce job within the last hour? ──
                   COMPLETION_TIME=$(kubectl get job "$ANNOUNCE_JOB" -n mussoncraft \
                     -o jsonpath='{.status.completionTime}')
 
@@ -197,6 +213,6 @@ spec:
                     echo "WARNING: Announce job marked Complete but no completionTime found. Proceeding with restart (cautiously)."
                   fi
 
-                  # All checks passed — trigger the restart
+                  # ── All guards passed — restart the deployment ──
                   kubectl rollout restart deployment/mussoncraft-minecraft-bedrock -n mussoncraft
                   echo "Restart triggered successfully."
