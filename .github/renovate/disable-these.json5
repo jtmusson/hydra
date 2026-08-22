@@ -10,6 +10,11 @@
             "description": ["Disable matching for kubernetes (do not track deps)"],
             "matchManagers": ["kubernetes"],
             "enabled": true // allow this 2026-08-22 to track deps in other files
+        },
+        {
+            "description": ["Disable matching for Flux resources"],
+            "matchPackageNames": ["*.toolkit.fluxcd.io"],
+            "enabled": false
         }
     ]
 }
