@@ -9,7 +9,7 @@
         {
             "description": ["Disable matching for kubernetes (do not track deps)"],
             "matchManagers": ["kubernetes"],
-            "enabled": false
+            "enabled": true // allow this 2026-08-22 to track deps in other files
         }
     ]
 }
