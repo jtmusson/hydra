@@ -13,7 +13,7 @@
         },
         {
             "description": ["Disable matching for Flux resources"],
-            "matchPackageNames": ["*.toolkit.fluxcd.io"],
+            "matchPackageNames": ["*.toolkit.fluxcd.io*"],
             "enabled": false
         }
     ]
