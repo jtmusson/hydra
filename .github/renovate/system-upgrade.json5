@@ -10,7 +10,7 @@
     },
     {
       "description": ["Limit Kubelet and Kubectl version to latest supported"],
-      "matchPackageNames": ["ghcr.io/siderolabs/kubelet","alpine/kubectl"],
+      "matchPackageNames": ["ghcr.io/siderolabs/kubelet"],
       "allowedVersions": "<=1.36.3"
     }
   ]
