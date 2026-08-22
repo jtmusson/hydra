@@ -47,7 +47,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: kubectl
-              image: bitnami/kubectl:latest
+              image: alpine/kubectl:1.36.3
               command:
                 - /bin/bash
                 - -c
