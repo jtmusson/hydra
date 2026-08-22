@@ -12,8 +12,9 @@
             "enabled": true // allow this 2026-08-22 to track deps in other files
         },
         {
-            "description": ["Disable matching for Flux resources"],
-            "matchPackageNames": ["*.toolkit.fluxcd.io*"],
+            "description": ["Disable matching for kubernetes-api (keep docker image updates)"],
+            "matchManagers": ["kubernetes"],
+            "matchDatasources": ["kubernetes-api"],
             "enabled": false
         }
     ]
