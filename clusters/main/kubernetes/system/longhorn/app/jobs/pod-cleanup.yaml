@@ -47,7 +47,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: kubectl
-              image: alpine/kubectl:1.36.3
+              image: oci.trueforge.org/containerforge/kubectl:1.31.1@sha256:128a01d4dee6a3c2041023db3490d7d5e9d64056c63b0db01cd5ec8fd0181e77
               command:
                 - /bin/bash
                 - -c
