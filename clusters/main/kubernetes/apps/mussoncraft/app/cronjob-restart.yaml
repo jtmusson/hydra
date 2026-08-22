@@ -90,6 +90,7 @@ spec:
                 capabilities:
                   drop:
                     - ALL
+                runAsUser: 568
               command:
                 - /bin/sh
                 - -c
@@ -164,6 +165,7 @@ spec:
                 capabilities:
                   drop:
                     - ALL
+                runAsUser: 568
               command:
                 - /bin/sh
                 - -c
