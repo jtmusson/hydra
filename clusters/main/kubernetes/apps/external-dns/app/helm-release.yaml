@@ -32,7 +32,7 @@ spec:
       requests:
         cpu: 10m
     externaldns:
-      interval: 10m
+      interval: 5m
       logFormat: text
       logLevel: info
       piholePassword: "${PIHOLE_PASSWORD}"
@@ -48,5 +48,3 @@ spec:
       sources:
         - ingress
         - service
-    podOptions:
-      hostUsers: true
