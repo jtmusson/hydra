@@ -69,11 +69,9 @@ spec:
         backups:
           enabled: true
           credentials: backblaze
-          # revision: "2"
           retentionPolicy: "14d"
         recovery:
           method: object_store
-          # revision: "1"
           credentials: backblaze
         database: "home-assistant"
         password: "${HOMEASSISTANT_CNPG_PASSWORD}"
@@ -81,7 +79,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: external
+        ingressClassName: internal
         hosts:
           - host: hass.${BASE_DOMAIN_EXT}
         integrations:
@@ -119,11 +117,3 @@ spec:
         server: "${PLUTO_IP}"
         type: nfs
         mountPath: "/config/backups"
-    service:
-      main:
-        enabled: true
-        loadBalancerIP: "${HASS_IP}"
-        type: LoadBalancer
-        integrations:
-          metallb:
-            enabled: true
