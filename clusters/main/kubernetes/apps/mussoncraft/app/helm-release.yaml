@@ -69,8 +69,10 @@ spec:
       main:
         enabled: true
         annotations:
-          external-dns.alpha.kubernetes.io/target: "{{ .Values.service.main.loadBalancerIP }}"
-          external-dns.alpha.kubernetes.io/internal-hostname: "mc-survival.${BASE_DOMAIN_EXT}"
+          # external-dns.alpha.kubernetes.io/target: "{{ .Values.service.main.loadBalancerIP }}"
+          # external-dns.alpha.kubernetes.io/internal-hostname: "mc-survival.${BASE_DOMAIN_EXT}"
+          external-dns.alpha.kubernetes.io/hostname: "mc-survival.${BASE_DOMAIN_EXT}"
+          external-dns.kubernetes.io/hostname: "mc-survival.${BASE_DOMAIN_EXT}"
         loadBalancerIP: "${MUSSONCRAFT_IP}"
         type: LoadBalancer
         integrations:
