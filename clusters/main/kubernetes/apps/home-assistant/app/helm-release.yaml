@@ -117,3 +117,11 @@ spec:
         server: "${PLUTO_IP}"
         type: nfs
         mountPath: "/config/backups"
+    service:
+      main:
+        enabled: true
+        loadBalancerIP: "${HASS_IP}"
+        type: LoadBalancer
+        integrations:
+          metallb:
+            enabled: true
