@@ -34,7 +34,7 @@ spec:
     externaldns:
       interval: 1m
       logFormat: text
-      logLevel: info
+      logLevel: debug
       piholePassword: "${PIHOLE_PASSWORD}"
       piholeServer: "http://10.242.1.4"
       piholeAPIVersion: "6" # set to 6 for pi-hole v6
