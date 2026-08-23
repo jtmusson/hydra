@@ -48,3 +48,4 @@ spec:
       sources:
         - ingress
         - service
+        - crd
