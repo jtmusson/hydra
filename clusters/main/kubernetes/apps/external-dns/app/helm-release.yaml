@@ -34,7 +34,7 @@ spec:
     externaldns:
       interval: 10m
       logFormat: text
-      logLevel: debug
+      logLevel: info
       triggerLoopOnEvent: true
       piholePassword: "${PIHOLE_PASSWORD}"
       piholeServer: "http://10.242.1.4"
@@ -49,7 +49,7 @@ spec:
       sources:
         - ingress
         - service
-        - crd
+        # - crd
     workload:
       main:
         podSpec:
