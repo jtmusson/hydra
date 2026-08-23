@@ -73,6 +73,8 @@ spec:
         ingressClassName: external
         annotations:
           nginx.ingress.kubernetes.io/whitelist-source-range: ${PRIVATE_IP_RANGE},${PODNET}
+          external-dns.alpha.kubernetes.io/target: hydra.${BASE_DOMAIN}
+          external-dns.kubernetes.io/target: hydra.${BASE_DOMAIN}
         hosts:
           - host: vaultwarden.${BASE_DOMAIN_EXT}
         integrations:
