@@ -46,6 +46,9 @@ spec:
       main:
         enabled: true
         ingressClassName: external
+        annotations:
+          external-dns.alpha.kubernetes.io/target: hydra.${BASE_DOMAIN}
+          external-dns.kubernetes.io/target: hydra.${BASE_DOMAIN}
         hosts:
           - host: ntfy.${BASE_DOMAIN_EXT} # update NTFY_BASE_URL
         integrations:
