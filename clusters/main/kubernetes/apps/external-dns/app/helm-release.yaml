@@ -49,7 +49,7 @@ spec:
       sources:
         - ingress
         - service
-        # - crd
+        - crd
     workload:
       main:
         podSpec:
