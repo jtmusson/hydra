@@ -32,9 +32,10 @@ spec:
       requests:
         cpu: 10m
     externaldns:
-      interval: 1m
+      interval: 10m
       logFormat: text
       logLevel: debug
+      triggerLoopOnEvent: true
       piholePassword: "${PIHOLE_PASSWORD}"
       piholeServer: "http://10.242.1.4"
       piholeAPIVersion: "6" # set to 6 for pi-hole v6
