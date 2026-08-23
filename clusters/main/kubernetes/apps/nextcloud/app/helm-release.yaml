@@ -63,6 +63,9 @@ spec:
       main:
         enabled: true
         ingressClassName: external
+        annotations:
+          external-dns.alpha.kubernetes.io/target: hydra.${BASE_DOMAIN}
+          external-dns.kubernetes.io/target: hydra.${BASE_DOMAIN}
         hosts:
           - host: nc.${BASE_DOMAIN_EXT}
             # paths is required for nextcloud, will 404 if not present
