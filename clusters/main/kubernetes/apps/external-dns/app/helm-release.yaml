@@ -49,3 +49,11 @@ spec:
         - ingress
         - service
         # - crd
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              extraArgs:
+                - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
+                - --crd-source-kind=DNSEndpoint
