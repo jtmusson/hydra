@@ -6,8 +6,8 @@ metadata:
   namespace: external-dns
 spec:
   endpoints:
-    - dnsName: hydra.${BASE_DOMAIN}
-      recordType: A
-      recordTTL: 300
-      targets:
-        - ${NGINX_EXTERNAL_IP}
+  - dnsName: hydra.${BASE_DOMAIN}
+    recordType: A
+    recordTTL: 300
+    targets:
+    - ${NGINX_EXTERNAL_IP}
