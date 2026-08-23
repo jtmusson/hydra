@@ -257,7 +257,7 @@ spec:
                   - "[CERTIFICATE_EXPIRATION] > 48h"
               - name: home-assistant
                 <<: *defaults-apps
-                url: "tcp://${NGINX_INTERNAL_IP}:8123"
+                url: "tcp://${HASS_IP}:8123"
                 conditions:
                   - "[CONNECTED] == true"
               - name: metube
