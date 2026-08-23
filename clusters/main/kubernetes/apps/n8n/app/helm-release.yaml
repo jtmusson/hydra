@@ -65,6 +65,8 @@ spec:
         ingressClassName: external
         annotations:
           nginx.ingress.kubernetes.io/whitelist-source-range: ${WHITELIST_IP_RANGE},${PODNET}
+          external-dns.alpha.kubernetes.io/target: hydra.${BASE_DOMAIN}
+          external-dns.kubernetes.io/target: hydra.${BASE_DOMAIN}
         hosts:
           - host: n8n.${BASE_DOMAIN} # ensure N8N_HOST is updated
           - host: n8n-hooks.${BASE_DOMAIN_EXT} # ensure WEBHOOK_URL is updated
