@@ -35,6 +35,7 @@ spec:
         cpu: 10m
         ephemeral-storage: 5Gi
       limits:
+        cpu: 1000m
         ephemeral-storage: 25Gi
     credentials:
       backblaze:
