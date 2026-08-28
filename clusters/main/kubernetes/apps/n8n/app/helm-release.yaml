@@ -35,7 +35,7 @@ spec:
         cpu: 10m
     image:
       repository: ghcr.io/n8n-io/n8n
-      tag: stable@sha256:14c4285bc3034dc5b51034aea393711d27053588e460722bce523453a626f23c
+      tag: stable@sha256:cfe2704ff858395503d42548206c2c99ea351a205e941063a9d9b77b0f404478
     deployment:
       N8N_HOST: n8n.${BASE_DOMAIN} # ensure ingress.main.hosts and below are updated
       N8N_EDITOR_BASE_URL: https://n8n.${BASE_DOMAIN}/
