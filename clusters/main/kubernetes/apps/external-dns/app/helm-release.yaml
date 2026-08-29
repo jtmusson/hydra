@@ -38,7 +38,6 @@ spec:
       triggerLoopOnEvent: true
       piholePassword: "${PIHOLE_PASSWORD}"
       piholeServer: "http://10.242.1.4"
-      piholeAPIVersion: "6" # set to 6 for pi-hole v6
       domainFilters:
         - "${BASE_DOMAIN}"
         - "${BASE_DOMAIN_EXT}"
