@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: n8n
-      version: 21.39.1
+      version: 21.40.1
       sourceRef:
         kind: HelmRepository
         name: truecharts
@@ -35,7 +35,7 @@ spec:
         cpu: 10m
     image:
       repository: ghcr.io/n8n-io/n8n
-      tag: stable@sha256:f98bb7c2e0818412e414d456ab31ef48be2dc5ce5d1e6fae7ae171fbb6923093
+      tag: stable@sha256:7406a977895d0158ab0f5b2a3dc66de636711f36c06f0e2e2b1c391fc91f8ec3
     deployment:
       N8N_HOST: n8n.${BASE_DOMAIN} # ensure ingress.main.hosts and below are updated
       N8N_EDITOR_BASE_URL: https://n8n.${BASE_DOMAIN}/
