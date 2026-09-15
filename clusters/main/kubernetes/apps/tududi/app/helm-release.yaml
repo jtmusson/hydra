@@ -125,6 +125,7 @@ spec:
                 TUDUDI_SESSION_SECRET: "${TUDUDI_SESSION_SECRET}"
                 TUDUDI_ALLOWED_ORIGINS: "https://tududi.${BASE_DOMAIN}"
                 FRONTEND_URL: "https://tududi.${BASE_DOMAIN}"
+                ENABLE_INBOX_CLARIFY: true
                 # RATE_LIMITING_ENABLED: false
                 SWAGGER_ENABLED: true
                 DISABLE_TELEGRAM: true
