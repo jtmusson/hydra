@@ -35,7 +35,7 @@ spec:
         cpu: 10m
     image:
       repository: ghcr.io/lldap/lldap
-      tag: 2026-08-28-debian@sha256:a92235d11a2f71f00eb1db56249c4199d98f548e7fdcdd4abab87f17a95c14b9
+      tag: 2026-09-22-debian@sha256:df8fc52c5df051fbdea2e5c401a70edd8b54c30e7d04ca178c67d4886057568b
     credentials:
       backblaze:
         accessKey: "${B2_ACCESSKEY}"
