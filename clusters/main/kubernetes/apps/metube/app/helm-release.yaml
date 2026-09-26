@@ -93,4 +93,4 @@ spec:
                 YTDL_OPTIONS: '{"ratelimit":20000000,"writesubtitles":true,"subtitleslangs":["en","-live_chat"],"updatetime":false,"postprocessors":[{"key":"FFmpegEmbedSubtitle","already_have_subtitle":false},{"key":"FFmpegMetadata","add_chapters":true}]}'
                 DOWNLOAD_MODE: "sequential"
                 TEMP_DIR: /tempdir
-                CORS_ALLOWED_ORIGINS: "https://www.youtube.com"
+                CORS_ALLOWED_ORIGINS: "https://metube.${BASE_DOMAIN},https://www.youtube.com"
