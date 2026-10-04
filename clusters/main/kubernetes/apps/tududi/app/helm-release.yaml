@@ -36,7 +36,7 @@ spec:
     image:
       repository: docker.io/chrisvel/tududi
       pullPolicy: IfNotPresent
-      tag: 1.7.3@sha256:ba5ab5dea7a763dc4ee6ab6453b044b2df448f3483e9e337e3f894bdcd68e116
+      tag: 1.7.1@sha256:c639c80415d993ba272d78f473691ddbad0ddc6c1af1d1e5bbb8304873cfe4a1
     credentials:
       backblaze:
         accessKey: "${B2_ACCESSKEY}"
@@ -65,19 +65,6 @@ spec:
           main:
             port: 3002
     persistence:
-      db:
-        enabled: true
-        mountPath: "/app/db"
-        volsync:
-          - name: db
-            credentials: backblaze
-            type: restic
-            dest:
-              enabled: false # change to true on restore
-              cacheCapacity: 10Gi
-            src:
-              enabled: true
-              cacheCapacity: 10Gi
       uploads:
         enabled: true
         mountPath: "/app/uploads"
@@ -91,6 +78,11 @@ spec:
             src:
               enabled: true
               cacheCapacity: 10Gi
+    cnpg:
+      main:
+        enabled: true
+        user: tududi
+        database: tududi
     redis:
       enabled: false
     securityContext:
@@ -125,7 +117,18 @@ spec:
                 TUDUDI_SESSION_SECRET: "${TUDUDI_SESSION_SECRET}"
                 TUDUDI_ALLOWED_ORIGINS: "https://tududi.${BASE_DOMAIN}"
                 FRONTEND_URL: "https://tududi.${BASE_DOMAIN}"
-                ENABLE_INBOX_CLARIFY: true
+                DB_DIALECT: "postgres"
+                DB_HOST: 
+                  secretKeyRef:
+                    name: cnpg-main-urls
+                    key: host
+                DB_PORT: "5432"
+                DB_NAME: "{{ .Values.cnpg.main.database }}"
+                DB_USER: "{{ .Values.cnpg.main.user }}"
+                DB_PASSWORD: 
+                  secretKeyRef:
+                    name: cnpg-main-user
+                    key: password
                 # RATE_LIMITING_ENABLED: false
                 SWAGGER_ENABLED: true
                 DISABLE_TELEGRAM: true
@@ -139,4 +142,3 @@ spec:
                 # EMAIL_FROM_NAME:
                 # PUID: "568"
                 # GUID: "568"
-                # DBFILE:
