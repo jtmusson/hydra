@@ -81,6 +81,15 @@ spec:
     cnpg:
       main:
         enabled: true
+        cluster:
+          singleNode: true
+        mode: standalone # change to `recovery` on restore
+        backups:
+          enabled: true
+          credentials: backblaze
+          retentionPolicy: "14d"
+        recovery:
+          credentials: backblaze
         user: tududi
         database: tududi
     redis:
