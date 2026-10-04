@@ -151,3 +151,4 @@ spec:
                 # EMAIL_FROM_NAME:
                 # PUID: "568"
                 # GUID: "568"
+                CALDAV_ALLOW_PRIVATE_HOSTS: true
