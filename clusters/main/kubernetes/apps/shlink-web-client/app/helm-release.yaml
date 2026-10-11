@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: shlink-web-client
-      version: 15.11.1
+      version: 16.0.0
       sourceRef:
         kind: HelmRepository
         name: truecharts
