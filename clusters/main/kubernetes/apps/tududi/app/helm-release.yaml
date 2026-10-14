@@ -141,13 +141,13 @@ spec:
                 # RATE_LIMITING_ENABLED: false
                 SWAGGER_ENABLED: true
                 DISABLE_TELEGRAM: true
-                # ENABLE_EMAIL: true
-                # EMAIL_SMTP_HOST: 
-                # EMAIL_SMTP_PORT: 
-                # EMAIL_SMTP_SECURE: 
-                # EMAIL_SMTP_USERNAME: 
-                # EMAIL_SMTP_PASSWORD: 
-                # EMAIL_FROM_ADDRESS:
+                ENABLE_EMAIL: true
+                EMAIL_SMTP_HOST: ${SMTP_SERVER}
+                EMAIL_SMTP_PORT: ${SMTP_PORT}
+                EMAIL_SMTP_SECURE: true
+                EMAIL_SMTP_USERNAME: ${TUDUDI_EMAIL_HOST_USER}
+                EMAIL_SMTP_PASSWORD: ${TUDUDI_EMAIL_HOST_PASSWORD}
+                EMAIL_FROM_ADDRESS: ${TUDUDI_EMAIL_HOST_USER}
                 # EMAIL_FROM_NAME:
                 # PUID: "568"
                 # GUID: "568"
