@@ -126,6 +126,7 @@ spec:
                 TUDUDI_SESSION_SECRET: "${TUDUDI_SESSION_SECRET}"
                 TUDUDI_ALLOWED_ORIGINS: "https://tududi.${BASE_DOMAIN}"
                 FRONTEND_URL: "https://tududi.${BASE_DOMAIN}"
+                TUDUDI_TRUST_PROXY: true
                 DB_DIALECT: "postgres"
                 DB_HOST: 
                   secretKeyRef:
