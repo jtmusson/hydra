@@ -127,6 +127,7 @@ spec:
                 TUDUDI_ALLOWED_ORIGINS: "https://tududi.${BASE_DOMAIN}"
                 FRONTEND_URL: "https://tududi.${BASE_DOMAIN}"
                 TUDUDI_TRUST_PROXY: true
+                TUDUDI_UPLOAD_PATH: "/app/uploads"
                 DB_DIALECT: "postgres"
                 DB_HOST: 
                   secretKeyRef:
