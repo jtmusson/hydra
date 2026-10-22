@@ -62,8 +62,9 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: internal
+        ingressClassName: external
         annotations:
+          nginx.ingress.kubernetes.io/whitelist-source-range: ${PRIVATE_IP_RANGE},${PODNET}
           external-dns.alpha.kubernetes.io/target: hydra.${BASE_DOMAIN}
           external-dns.kubernetes.io/target: hydra.${BASE_DOMAIN}
         hosts:
