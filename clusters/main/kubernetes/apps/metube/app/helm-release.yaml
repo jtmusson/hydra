@@ -91,6 +91,7 @@ spec:
                 DEFAULT_THEME: "dark"
                 OUTPUT_TEMPLATE: "%(title)s [%(id)s].%(ext)s"
                 OUTPUT_TEMPLATE_PLAYLIST: ""
+                OUTPUT_TEMPLATE_CHANNEL: ""
                 YTDL_OPTIONS: '{"ratelimit":20000000,"writesubtitles":true,"subtitleslangs":["en","-live_chat"],"updatetime":false,"postprocessors":[{"key":"FFmpegEmbedSubtitle","already_have_subtitle":false},{"key":"FFmpegMetadata","add_chapters":true}]}'
                 DOWNLOAD_MODE: "sequential"
                 TEMP_DIR: /tempdir
