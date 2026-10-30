@@ -113,8 +113,9 @@ spec:
                 # NTFY_DATABASE_URL: "postgres://{{ .Values.cnpg.main.user }}:$(DB_PASSWORD)@$(DB_HOST):5432/{{ .Values.cnpg.main.database }}"
                 # Auth
                 NTFY_AUTH_DEFAULT_ACCESS: "deny-all"
-                # NTFY_AUTH_USERS: ""
-                # NTFY_AUTH_ACCESS: ""
+                NTFY_AUTH_USERS: "${NTFY_AUTH_USERS}"
+                NTFY_AUTH_ACCESS: "${NTFY_AUTH_ACCESS}"
+                NTFY_AUTH_TOKENS: "${NTFY_AUTH_TOKENS}"
                 NTFY_ENABLE_SIGNUP: false
                 NTFY_ENABLE_LOGIN: true
                 # SMTP
