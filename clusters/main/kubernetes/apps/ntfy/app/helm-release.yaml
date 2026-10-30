@@ -93,18 +93,35 @@ spec:
           containers:
             main:
               env:
+                # Access and Proxy
                 NTFY_BASE_URL: "https://ntfy.${BASE_DOMAIN_EXT}"
                 NTFY_BEHIND_PROXY: true
+                # Files
                 ENABLE_CACHE_FILE: true # set false when using PostgreSQL
                 ENABLE_AUTH_FILE: true # set false when using PostgreSQL
+                # NTFY_CACHE_FILE: "" # set to null when using PostgreSQL
+                # NTFY_AUTH_FILE: "" # set to null when using PostgreSQL
+                # Database
+                # DB_HOST:
+                #   secretKeyRef:
+                #     name: cnpg-main-urls
+                #     key: host
+                # DB_PASSWORD:
+                #   secretKeyRef:
+                #     name: cnpg-main-user
+                #     key: password
+                # NTFY_DATABASE_URL: "postgres://{{ .Values.cnpg.main.user }}:$(DB_PASSWORD)@$(DB_HOST):5432/{{ .Values.cnpg.main.database }}"
+                # Auth
                 NTFY_AUTH_DEFAULT_ACCESS: "deny-all"
-                NTFY_SMTP_SERVER_LISTEN: ":25"
-                NTFY_SMTP_SERVER_DOMAIN: "ntfy.${BASE_DOMAIN_EXT}"
+                # NTFY_AUTH_USERS: ""
+                # NTFY_AUTH_ACCESS: ""
                 NTFY_ENABLE_SIGNUP: false
                 NTFY_ENABLE_LOGIN: true
+                # SMTP
+                NTFY_SMTP_SERVER_LISTEN: ":25"
+                NTFY_SMTP_SERVER_DOMAIN: "ntfy.${BASE_DOMAIN_EXT}"
+                # Web Push
                 NTFY_WEB_PUSH_PUBLIC_KEY: "${NTFY_WEB_PUSH_PUBLIC_KEY}"
                 NTFY_WEB_PUSH_PRIVATE_KEY: "${NTFY_WEB_PUSH_PRIVATE_KEY}"
                 NTFY_WEB_PUSH_FILE: "/var/cache/ntfy/webpush.db" # set to null when using PostgreSQL
                 NTFY_WEB_PUSH_EMAIL_ADDRESS: "${NTFY_WEB_PUSH_EMAIL_ADDRESS}"
-                # NTFY_CACHE_FILE: "" # set to null when using PostgreSQL
-                # NTFY_AUTH_FILE: "" # set to null when using PostgreSQL
