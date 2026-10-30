@@ -115,7 +115,7 @@ spec:
                 NTFY_AUTH_DEFAULT_ACCESS: "deny-all"
                 NTFY_AUTH_USERS: "${NTFY_AUTH_USERS}"
                 NTFY_AUTH_ACCESS: "${NTFY_AUTH_ACCESS}"
-                NTFY_AUTH_TOKENS: ""
+                # NTFY_AUTH_TOKENS: "${NTFY_AUTH_TOKENS}"
                 NTFY_ENABLE_SIGNUP: false
                 NTFY_ENABLE_LOGIN: true
                 # SMTP
