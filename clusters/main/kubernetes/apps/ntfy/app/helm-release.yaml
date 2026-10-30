@@ -95,8 +95,8 @@ spec:
               env:
                 NTFY_BASE_URL: "https://ntfy.${BASE_DOMAIN_EXT}"
                 NTFY_BEHIND_PROXY: true
-                ENABLE_CACHE_FILE: true
-                ENABLE_AUTH_FILE: true
+                ENABLE_CACHE_FILE: true # set false when using PostgreSQL
+                ENABLE_AUTH_FILE: true # set false when using PostgreSQL
                 NTFY_AUTH_DEFAULT_ACCESS: "deny-all"
                 NTFY_SMTP_SERVER_LISTEN: ":25"
                 NTFY_SMTP_SERVER_DOMAIN: "ntfy.${BASE_DOMAIN_EXT}"
@@ -104,5 +104,7 @@ spec:
                 NTFY_ENABLE_LOGIN: true
                 NTFY_WEB_PUSH_PUBLIC_KEY: "${NTFY_WEB_PUSH_PUBLIC_KEY}"
                 NTFY_WEB_PUSH_PRIVATE_KEY: "${NTFY_WEB_PUSH_PRIVATE_KEY}"
-                NTFY_WEB_PUSH_FILE: "/var/cache/ntfy/webpush.db"
+                NTFY_WEB_PUSH_FILE: "/var/cache/ntfy/webpush.db" # set to null when using PostgreSQL
                 NTFY_WEB_PUSH_EMAIL_ADDRESS: "${NTFY_WEB_PUSH_EMAIL_ADDRESS}"
+                # NTFY_CACHE_FILE: "" # set to null when using PostgreSQL
+                # NTFY_AUTH_FILE: "" # set to null when using PostgreSQL
