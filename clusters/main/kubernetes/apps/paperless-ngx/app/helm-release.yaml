@@ -46,6 +46,7 @@ spec:
       main:
         cluster:
           singleNode: true
+          instances: 1
         mode: recovery # set to `recovery` on restore
         backups:
           enabled: true

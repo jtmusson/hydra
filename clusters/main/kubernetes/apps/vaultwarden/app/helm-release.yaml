@@ -92,6 +92,7 @@ spec:
       main:
         cluster:
           singleNode: true
+          instances: 1
         mode: recovery # change to `standalone` on initial install
         backups:
           enabled: true
