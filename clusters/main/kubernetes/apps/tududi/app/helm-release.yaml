@@ -83,6 +83,7 @@ spec:
         enabled: true
         cluster:
           singleNode: true
+          instances: 1
         mode: standalone # change to `recovery` on restore
         backups:
           enabled: true
