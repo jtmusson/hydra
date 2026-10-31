@@ -84,7 +84,7 @@ spec:
               type: RuntimeDefault
           containers:
             - name: kubectl
-              image: oci.trueforge.org/containerforge/kubectl:1.31.1@sha256:8502075cfe296ac5b38b677666442b77c04d90349608305486d6ff7e9fff5155
+              image: oci.trueforge.org/containerforge/kubectl:1.31.1@sha256:4a51a8930e778b7f996ab476e5fcef4385453d1b78362c878bcc2b2501f99a24
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -159,7 +159,7 @@ spec:
               type: RuntimeDefault
           containers:
             - name: kubectl
-              image: oci.trueforge.org/containerforge/kubectl:1.31.1@sha256:8502075cfe296ac5b38b677666442b77c04d90349608305486d6ff7e9fff5155
+              image: oci.trueforge.org/containerforge/kubectl:1.31.1@sha256:4a51a8930e778b7f996ab476e5fcef4385453d1b78362c878bcc2b2501f99a24
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:

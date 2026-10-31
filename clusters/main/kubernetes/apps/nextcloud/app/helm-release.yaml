@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: nextcloud
-      version: 49.0.15
+      version: 49.0.20
       sourceRef:
         kind: HelmRepository
         name: truecharts
@@ -64,7 +64,7 @@ spec:
         enabled: true
         ingressClassName: external
         annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: ${PRIVATE_IP_RANGE},${PODNET}
+          # nginx.ingress.kubernetes.io/whitelist-source-range: ${PRIVATE_IP_RANGE},${PODNET}
           external-dns.alpha.kubernetes.io/target: hydra.${BASE_DOMAIN}
           external-dns.kubernetes.io/target: hydra.${BASE_DOMAIN}
         hosts:
