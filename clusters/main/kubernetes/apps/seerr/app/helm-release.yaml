@@ -71,7 +71,8 @@ spec:
       main:
         cluster:
           singleNode: true
-        mode: standalone # change to `recovery` on restore
+          instance: 1
+        mode: recovery # change to `recovery` on restore
         backups:
           enabled: true
           credentials: backblaze
@@ -85,6 +86,6 @@ spec:
             type: restic
             credentials: backblaze
             dest:
-              enabled: true # enable on restore
+              enabled: true
             src:
               enabled: true
