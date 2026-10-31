@@ -32,7 +32,7 @@ spec:
 #      name: cluster-config ## Not in the seerr namespace
   values:
     global:
-      stopAll: true
+      stopAll: false
     resources:
       requests:
         cpu: 25m
