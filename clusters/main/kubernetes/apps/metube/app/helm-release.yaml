@@ -36,7 +36,7 @@ spec:
         ephemeral-storage: 5Gi
       limits:
         cpu: 1000m
-        ephemeral-storage: 25Gi
+        ephemeral-storage: 35Gi
     credentials:
       backblaze:
         accessKey: "${B2_ACCESSKEY}"
@@ -81,8 +81,7 @@ spec:
         enabled: true
         type: emptyDir
         mountPath: "/tempdir"
-        size: 25Gi
-        medium: ""
+        size: 30Gi
     workload:
       main:
         podSpec:
