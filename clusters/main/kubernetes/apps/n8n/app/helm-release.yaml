@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: n8n
-      version: 24.0.3
+      version: 24.0.2
       sourceRef:
         kind: HelmRepository
         name: truecharts
@@ -133,11 +133,13 @@ spec:
             main:
               env:
                 GENERIC_TIMEZONE: "Europe/London"
+                N8N_WEBHOOK_URL: "https://n8n-hooks.${BASE_DOMAIN_EXT}/"
                 N8N_SKIP_AUTH_ON_OAUTH_CALLBACK: false
                 N8N_VERSION_NOTIFICATIONS_ENABLED: false
                 N8N_BLOCK_FILE_ACCESS_TO_N8N_FILES: true
                 N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: true
                 N8N_LOG_LEVEL: info
                 N8N_RESTRICT_FILE_ACCESS_TO: "/mnt/paperless-ngx-brother-printer;/mnt/brother-printer-receipts;/mnt/movies"
+                N8N_MIGRATE_FS_STORAGE_PATH: true
                 NODES_EXCLUDE: "[]"
                 N8N_PROXY_HOPS: 1
