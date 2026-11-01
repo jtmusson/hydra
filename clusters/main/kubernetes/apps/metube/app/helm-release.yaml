@@ -80,7 +80,7 @@ spec:
       tempdir:
         enabled: true
         type: emptyDir
-        mountPath: /tempdir
+        mountPath: "/tempdir"
         size: 25Gi
     workload:
       main:
@@ -93,6 +93,7 @@ spec:
                 OUTPUT_TEMPLATE_PLAYLIST: ""
                 OUTPUT_TEMPLATE_CHANNEL: ""
                 YTDL_OPTIONS: '{"ratelimit":20000000,"writesubtitles":true,"subtitleslangs":["en","-live_chat"],"updatetime":false,"postprocessors":[{"key":"FFmpegEmbedSubtitle","already_have_subtitle":false},{"key":"FFmpegMetadata","add_chapters":true}]}'
-                DOWNLOAD_MODE: "sequential"
-                TEMP_DIR: /tempdir
+                MAX_CONCURRENT_DOWNLOADS: "1"
+                CLEAR_COMPLETED_AFTER: 604800 # 1 week in seconds
+                TEMP_DIR: "/tempdir"
                 CORS_ALLOWED_ORIGINS: "https://metube.${BASE_DOMAIN},https://www.youtube.com"
