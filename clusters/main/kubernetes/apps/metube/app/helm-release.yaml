@@ -82,6 +82,7 @@ spec:
         type: emptyDir
         mountPath: "/tempdir"
         size: 25Gi
+        medium: ""
     workload:
       main:
         podSpec:
