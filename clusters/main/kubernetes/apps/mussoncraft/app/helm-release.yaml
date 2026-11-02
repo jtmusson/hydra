@@ -119,6 +119,9 @@ spec:
                 MAX_PLAYERS: 8
                 MAX_THREADS: 0
                 DEFAULT_PLAYER_PERMISSION_LEVEL: "member"
+                # DO NOT SET false: this forces BDS to bind 19132/19133, including
+                # NetherNet's TCP listener. false == nothing on 19132 == total outage.
+                # https://learn.microsoft.com/en-us/minecraft/creator/documents/bedrockserver/server-properties
                 ENABLE_LAN_VISIBILITY: true
                 SERVER_NAME: "Mussoncraft"
                 VIEW_DISTANCE: 32

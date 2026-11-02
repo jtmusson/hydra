@@ -115,6 +115,9 @@ spec:
                 LEVEL_NAME: 71YC-Server
                 ONLINE_MODE: true
                 MAX_PLAYERS: 8
+                # DO NOT SET false: this forces BDS to bind 19132/19133, including
+                # NetherNet's TCP listener. false == nothing on 19132 == total outage.
+                # https://learn.microsoft.com/en-us/minecraft/creator/documents/bedrockserver/server-properties
                 ENABLE_LAN_VISIBILITY: true
                 OPS: "${MINECRAFT_OPS}"
                 SERVER_NAME: 71YC Server
