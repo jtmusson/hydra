@@ -84,11 +84,6 @@ spec:
             primary: true
             port: 19132
             protocol: tcp
-          # NetherNet signalling / handshake
-          # nethernet-tcp:
-          #   enabled: true
-          #   port: 19132
-          #   protocol: tcp
           # one UDP port per connected client
           udp-19140: { enabled: true, port: 19140, protocol: udp }
           udp-19141: { enabled: true, port: 19141, protocol: udp }
@@ -132,29 +127,3 @@ spec:
                 ALLOW_LIST: true
                 ALLOW_LIST_USERS: "${MINECRAFT_ALLOW_LIST_USERS}"
                 CONTENT_LOG_CONSOLE_OUTPUT_ENABLED: true
-      mcmonitor-cron:
-        enabled: false # set up token in gatus then change to true
-        type: CronJob
-        schedule: "*/5 * * * *"
-        podSpec:
-          restartPolicy: Never
-          containers:
-            mcmonitor-cron:
-              enabled: true
-              primary: true
-              imageSelector: image
-              resources:
-                excludeExtra: true
-              command:
-                - /bin/sh
-                - -c
-                - |
-                  /usr/local/bin/mc-monitor status-bedrock --host "{{ .Values.service.main.loadBalancerIP }}" --port "{{ .Values.service.main.ports.main.port }}" --protocol nethernet \
-                  && curl -vs -H "Authorization: Bearer ${GATUS_EXT_MUSSONCRAFT_TOKEN}" -X POST "https://gatus.${BASE_DOMAIN}/api/v1/endpoints/apps-hydra_minecraft-mussoncraft-ext/external?success=true" 2>&1
-              probes:
-                liveness:
-                  enabled: false
-                readiness:
-                  enabled: false
-                startup:
-                  enabled: false
