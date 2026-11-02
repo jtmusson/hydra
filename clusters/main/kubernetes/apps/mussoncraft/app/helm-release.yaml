@@ -127,3 +127,35 @@ spec:
                 ALLOW_LIST: true
                 ALLOW_LIST_USERS: "${MINECRAFT_ALLOW_LIST_USERS}"
                 CONTENT_LOG_CONSOLE_OUTPUT_ENABLED: true
+              probes:
+                startup:
+                  custom: true
+                  spec:
+                    initialDelaySeconds: 30
+                    periodSeconds: 10
+                    timeoutSeconds: 5
+                    failureThreshold: 30      # 5 minutes of grace
+                    command:
+                      - /usr/local/bin/mc-monitor
+                      - status-bedrock
+                      - --host
+                      - 127.0.0.1
+                      - --port
+                      - "19132"
+                      - --protocol
+                      - nethernet
+                liveness:
+                  custom: true
+                  spec:
+                    periodSeconds: 30
+                    timeoutSeconds: 5
+                    failureThreshold: 5
+                    command:
+                      - /usr/local/bin/mc-monitor
+                      - status-bedrock
+                      - --host
+                      - 127.0.0.1
+                      - --port
+                      - "19132"
+                      - --protocol
+                      - nethernet
