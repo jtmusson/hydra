@@ -429,20 +429,6 @@ spec:
                   - "[CERTIFICATE_EXPIRATION] > 48h"
 
             external-endpoints:
-              - name: minecraft-bedrock-ext
-                group: apps-hydra
-                token: "${GATUS_EXT_MINECRAFT_BEDROCK_TOKEN}"
-                heartbeat:
-                  interval: 7m
-                alerts:
-                  - type: ntfy
-              - name: minecraft-mussoncraft-ext
-                group: apps-hydra
-                token: "${GATUS_EXT_MUSSONCRAFT_TOKEN}"
-                heartbeat:
-                  interval: 7m
-                alerts:
-                  - type: ntfy
               - name: brennin
                 group: machines
                 token: "${GATUS_EXT_BRENNIN_TOKEN}"
