@@ -128,9 +128,11 @@ spec:
                 ALLOW_LIST_USERS: "${MINECRAFT_ALLOW_LIST_USERS}"
                 CONTENT_LOG_CONSOLE_OUTPUT_ENABLED: true
               probes:
+                startup:
+                  type: tcp
                 liveness:
                   type: tcp
                 readiness:
-                  type: tcp
-                startup:
-                  type: tcp
+                  type: http
+                  path: /v1/join
+                  port: 19132
