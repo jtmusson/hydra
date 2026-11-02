@@ -29,7 +29,7 @@ spec:
     keepHistory: false
   values:
     global:
-      stopAll: true # change to 'true' to stop all pods whenever world maintenance is needed
+      stopAll: false # change to 'true' to stop all pods whenever world maintenance is needed
     image:
       repository: ghcr.io/itzg/minecraft-bedrock-server
       pullPolicy: IfNotPresent
