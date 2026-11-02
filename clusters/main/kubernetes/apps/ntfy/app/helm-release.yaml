@@ -114,8 +114,8 @@ spec:
                 # Files
                 ENABLE_CACHE_FILE: false # set false when using PostgreSQL
                 ENABLE_AUTH_FILE: false # set false when using PostgreSQL
-                NTFY_CACHE_FILE: "" # set to null when using PostgreSQL
-                NTFY_AUTH_FILE: "" # set to null when using PostgreSQL
+                # NTFY_CACHE_FILE: "" # set to null when using PostgreSQL
+                # NTFY_AUTH_FILE: "" # set to null when using PostgreSQL
                 # Database
                 DB_HOST:
                   secretKeyRef:
