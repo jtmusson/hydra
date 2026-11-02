@@ -77,17 +77,6 @@ spec:
           credentials: backblaze
         user: ntfy
         database: ntfy
-    persistence:
-      config:
-        enabled: true
-        volsync:
-          - name: config-1
-            credentials: backblaze
-            type: restic
-            dest:
-              enabled: false # enable on restore
-            src:
-              enabled: true
     service:
       main:
         enabled: true
