@@ -78,6 +78,34 @@ spec:
         integrations:
           metallb:
             enabled: true
+        ports:
+          main:
+            enabled: true
+            primary: true
+            port: 19132
+            protocol: udp
+          # NetherNet signalling / handshake
+          nethernet-tcp:
+            enabled: true
+            port: 19132
+            protocol: tcp
+          # one UDP port per connected client
+          udp-19140: { enabled: true, port: 19140, protocol: udp }
+          udp-19141: { enabled: true, port: 19141, protocol: udp }
+          udp-19142: { enabled: true, port: 19142, protocol: udp }
+          udp-19143: { enabled: true, port: 19143, protocol: udp }
+          udp-19144: { enabled: true, port: 19144, protocol: udp }
+          udp-19145: { enabled: true, port: 19145, protocol: udp }
+          udp-19146: { enabled: true, port: 19146, protocol: udp }
+          udp-19147: { enabled: true, port: 19147, protocol: udp }
+          udp-19148: { enabled: true, port: 19148, protocol: udp }
+          udp-19149: { enabled: true, port: 19149, protocol: udp }
+          udp-19150: { enabled: true, port: 19150, protocol: udp }
+          udp-19151: { enabled: true, port: 19151, protocol: udp }
+          udp-19152: { enabled: true, port: 19152, protocol: udp }
+          udp-19153: { enabled: true, port: 19153, protocol: udp }
+          udp-19154: { enabled: true, port: 19154, protocol: udp }
+          udp-19155: { enabled: true, port: 19155, protocol: udp }
     workload:
       main:
         podSpec:
@@ -86,6 +114,8 @@ spec:
               env:
                 # renovate: datasource=custom.minecraft-bedrock depName=minecraft-bedrock
                 VERSION: 1.26.61.1
+                TRANSPORT: nethernet
+                SERVER_UDP_PORTS: "{{ .Values.service.main.loadBalancerIP }}:19140-19155:19140-19155"
                 ALLOW_CHEATS: false
                 DIFFICULTY: normal
                 GAMEMODE: survival
@@ -119,7 +149,7 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  /usr/local/bin/mc-monitor status-bedrock --host "{{ .Values.service.main.loadBalancerIP }}" --port "{{ .Values.service.main.ports.main.port }}" \
+                  /usr/local/bin/mc-monitor status-bedrock --host "{{ .Values.service.main.loadBalancerIP }}" --port "{{ .Values.service.main.ports.main.port }}" --protocol nethernet \
                   && curl -vs -H "Authorization: Bearer ${GATUS_EXT_MUSSONCRAFT_TOKEN}" -X POST "https://gatus.${BASE_DOMAIN}/api/v1/endpoints/apps-hydra_minecraft-mussoncraft-ext/external?success=true" 2>&1
               probes:
                 liveness:
