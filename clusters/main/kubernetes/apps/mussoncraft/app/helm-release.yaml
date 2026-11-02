@@ -133,7 +133,7 @@ spec:
                 ALLOW_LIST_USERS: "${MINECRAFT_ALLOW_LIST_USERS}"
                 CONTENT_LOG_CONSOLE_OUTPUT_ENABLED: true
       mcmonitor-cron:
-        enabled: true # set up token in gatus then change to true
+        enabled: false # set up token in gatus then change to true
         type: CronJob
         schedule: "*/5 * * * *"
         podSpec:
