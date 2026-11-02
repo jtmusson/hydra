@@ -32,11 +32,13 @@ spec:
       stopAll: false
     resources:
       requests:
-        cpu: 10m
-        ephemeral-storage: 5Gi
+        cpu: 50m
+        memory: 2Gi
+        ephemeral-storage: 2Gi
       limits:
-        cpu: 1000m
-        ephemeral-storage: 35Gi
+        cpu: 2000m
+        memory: 3Gi
+        ephemeral-storage: 4Gi
     credentials:
       backblaze:
         accessKey: "${B2_ACCESSKEY}"
@@ -77,8 +79,12 @@ spec:
         path: "${PATH_MOVIES}/_MakeMKV_Out"
         server: "${PLUTO_IP}"
         type: nfs
-      tempdir:
-        enabled: false
+      tmp:
+        enabled: true
+        size: 1Gi
+      devshm:
+        enabled: true
+        size: 1Gi
     workload:
       main:
         podSpec:
@@ -89,7 +95,7 @@ spec:
                 OUTPUT_TEMPLATE: "%(title)s [%(id)s].%(ext)s"
                 OUTPUT_TEMPLATE_PLAYLIST: ""
                 OUTPUT_TEMPLATE_CHANNEL: ""
-                YTDL_OPTIONS: '{"ratelimit":20000000,"writesubtitles":true,"subtitleslangs":["en","-live_chat"],"updatetime":false,"postprocessors":[{"key":"FFmpegEmbedSubtitle","already_have_subtitle":false},{"key":"FFmpegMetadata","add_chapters":true}]}'
+                YTDL_OPTIONS: '{"max_filesize":4000000000,"ratelimit":20000000,"writesubtitles":true,"subtitleslangs":["en","-live_chat"],"updatetime":false,"cachedir":"/tmp/yt-dlp-cache","postprocessors":[{"key":"FFmpegEmbedSubtitle","already_have_subtitle":false},{"key":"FFmpegMetadata","add_chapters":true}]}'
                 MAX_CONCURRENT_DOWNLOADS: "1"
                 CLEAR_COMPLETED_AFTER: "604800" # 1 week in seconds
                 TEMP_DIR: "/downloads/.tmp"
