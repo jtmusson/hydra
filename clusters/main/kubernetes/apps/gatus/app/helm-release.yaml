@@ -292,6 +292,12 @@ spec:
                   - "[CONNECTED] == true"
               - name: minecraft-mussoncraft
                 <<: *defaults-apps
+                url: "http://${MINECRAFT_IP}:19132/v1/join"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].name == 71YC-Server"
+              - name: minecraft-mussoncraft
+                <<: *defaults-apps
                 url: "http://${MUSSONCRAFT_IP}:19132/v1/join"
                 conditions:
                   - "[STATUS] == 200"
