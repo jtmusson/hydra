@@ -290,6 +290,12 @@ spec:
                 url: "tcp://${MQTT_IP}:1883"
                 conditions:
                   - "[CONNECTED] == true"
+              - name: minecraft-mussoncraft
+                <<: *defaults-apps
+                url: "http://${MUSSONCRAFT_IP}:19132/v1/join"
+                conditions:
+                  - "[STATUS] == 200"
+                  - "[BODY].name == Mussoncraft"
               - name: n8n
                 <<: *defaults-apps
                 url: "https://n8n.${BASE_DOMAIN}/healthz/readiness"
