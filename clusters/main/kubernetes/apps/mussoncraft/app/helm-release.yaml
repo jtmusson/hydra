@@ -119,7 +119,7 @@ spec:
                 MAX_PLAYERS: 8
                 MAX_THREADS: 0
                 DEFAULT_PLAYER_PERMISSION_LEVEL: "member"
-                ENABLE_LAN_VISIBILITY: true
+                ENABLE_LAN_VISIBILITY: false
                 SERVER_NAME: "Mussoncraft"
                 VIEW_DISTANCE: 32
                 PLAYER_IDLE_TIMEOUT: 0

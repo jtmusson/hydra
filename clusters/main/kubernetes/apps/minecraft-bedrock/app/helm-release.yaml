@@ -115,7 +115,7 @@ spec:
                 LEVEL_NAME: 71YC-Server
                 ONLINE_MODE: true
                 MAX_PLAYERS: 8
-                ENABLE_LAN_VISIBILITY: true
+                ENABLE_LAN_VISIBILITY: false
                 OPS: "${MINECRAFT_OPS}"
                 SERVER_NAME: 71YC Server
                 TEXTUREPACK_REQUIRED: true
