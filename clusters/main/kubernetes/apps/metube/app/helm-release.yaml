@@ -78,10 +78,7 @@ spec:
         server: "${PLUTO_IP}"
         type: nfs
       tempdir:
-        enabled: true
-        type: emptyDir
-        mountPath: "/tempdir"
-        size: 30Gi
+        enabled: false
     workload:
       main:
         podSpec:
@@ -94,6 +91,6 @@ spec:
                 OUTPUT_TEMPLATE_CHANNEL: ""
                 YTDL_OPTIONS: '{"ratelimit":20000000,"writesubtitles":true,"subtitleslangs":["en","-live_chat"],"updatetime":false,"postprocessors":[{"key":"FFmpegEmbedSubtitle","already_have_subtitle":false},{"key":"FFmpegMetadata","add_chapters":true}]}'
                 MAX_CONCURRENT_DOWNLOADS: "1"
-                CLEAR_COMPLETED_AFTER: 604800 # 1 week in seconds
-                TEMP_DIR: "/tempdir"
+                CLEAR_COMPLETED_AFTER: "604800" # 1 week in seconds
+                TEMP_DIR: "/downloads/.tmp"
                 CORS_ALLOWED_ORIGINS: "https://metube.${BASE_DOMAIN},https://www.youtube.com"
