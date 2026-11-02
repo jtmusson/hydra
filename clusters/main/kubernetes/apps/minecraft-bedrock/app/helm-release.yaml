@@ -115,7 +115,7 @@ spec:
                 LEVEL_NAME: 71YC-Server
                 ONLINE_MODE: true
                 MAX_PLAYERS: 8
-                ENABLE_LAN_VISIBILITY: false
+                ENABLE_LAN_VISIBILITY: true
                 OPS: "${MINECRAFT_OPS}"
                 SERVER_NAME: 71YC Server
                 TEXTUREPACK_REQUIRED: true
@@ -123,3 +123,10 @@ spec:
                 WHITE_LIST: true # set because source chart sets to false otherwise
                 ALLOW_LIST: true
                 ALLOW_LIST_USERS: "${MINECRAFT_ALLOW_LIST_USERS}"
+              probes:
+                liveness:
+                  type: tcp
+                readiness:
+                  type: tcp
+                startup:
+                  type: tcp
