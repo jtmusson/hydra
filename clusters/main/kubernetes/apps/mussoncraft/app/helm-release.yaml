@@ -83,12 +83,12 @@ spec:
             enabled: true
             primary: true
             port: 19132
-            protocol: udp
-          # NetherNet signalling / handshake
-          nethernet-tcp:
-            enabled: true
-            port: 19132
             protocol: tcp
+          # NetherNet signalling / handshake
+          # nethernet-tcp:
+          #   enabled: true
+          #   port: 19132
+          #   protocol: tcp
           # one UDP port per connected client
           udp-19140: { enabled: true, port: 19140, protocol: udp }
           udp-19141: { enabled: true, port: 19141, protocol: udp }
