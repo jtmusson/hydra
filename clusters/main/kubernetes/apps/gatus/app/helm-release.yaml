@@ -290,7 +290,7 @@ spec:
                 url: "tcp://${MQTT_IP}:1883"
                 conditions:
                   - "[CONNECTED] == true"
-              - name: minecraft-mussoncraft
+              - name: minecraft-bedrock
                 <<: *defaults-apps
                 url: "http://${MINECRAFT_IP}:19132/v1/join"
                 conditions:
