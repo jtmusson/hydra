@@ -123,29 +123,3 @@ spec:
                 WHITE_LIST: true # set because source chart sets to false otherwise
                 ALLOW_LIST: true
                 ALLOW_LIST_USERS: "${MINECRAFT_ALLOW_LIST_USERS}"
-      mcmonitor-cron:
-        enabled: true
-        type: CronJob
-        schedule: "*/5 * * * *"
-        podSpec:
-          restartPolicy: Never
-          containers:
-            mcmonitor-cron:
-              enabled: true
-              primary: true
-              imageSelector: image
-              resources:
-                excludeExtra: true
-              command:
-                - /bin/sh
-                - -c
-                - |
-                  /usr/local/bin/mc-monitor status-bedrock --host "{{ .Values.service.main.loadBalancerIP }}" --port "{{ .Values.service.main.ports.main.port }}" \
-                  && curl -vs -H "Authorization: Bearer ${GATUS_EXT_MINECRAFT_BEDROCK_TOKEN}" -X POST "https://gatus.${BASE_DOMAIN}/api/v1/endpoints/apps-hydra_minecraft-bedrock-ext/external?success=true" 2>&1
-              probes:
-                liveness:
-                  enabled: false
-                readiness:
-                  enabled: false
-                startup:
-                  enabled: false
