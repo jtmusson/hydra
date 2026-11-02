@@ -85,6 +85,12 @@ spec:
       devshm:
         enabled: true
         size: 1Gi
+      varlogs:
+        enabled: true
+        size: 1Gi
+      varrun:
+        enabled: true
+        size: 1Gi
     workload:
       main:
         podSpec:
