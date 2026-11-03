@@ -103,18 +103,7 @@ spec:
                 # Files
                 ENABLE_CACHE_FILE: false # set false when using PostgreSQL
                 ENABLE_AUTH_FILE: false # set false when using PostgreSQL
-                # NTFY_CACHE_FILE: "" # set to null when using PostgreSQL
-                # NTFY_AUTH_FILE: "" # set to null when using PostgreSQL
                 # Database
-                # DB_HOST:
-                #   secretKeyRef:
-                #     name: cnpg-main-urls
-                #     key: host
-                # DB_PASSWORD:
-                #   secretKeyRef:
-                #     name: cnpg-main-user
-                #     key: password
-                # NTFY_DATABASE_URL: "postgres://{{ .Values.cnpg.main.user }}:$(DB_PASSWORD)@$(DB_HOST):5432/{{ .Values.cnpg.main.database }}"
                 NTFY_DATABASE_URL:
                   secretKeyRef:
                     name: cnpg-main-urls
@@ -132,6 +121,5 @@ spec:
                 # Web Push
                 NTFY_WEB_PUSH_PUBLIC_KEY: "${NTFY_WEB_PUSH_PUBLIC_KEY}"
                 NTFY_WEB_PUSH_PRIVATE_KEY: "${NTFY_WEB_PUSH_PRIVATE_KEY}"
-                # NTFY_WEB_PUSH_FILE: "/var/cache/ntfy/webpush.db" # set to null when using PostgreSQL
                 NTFY_WEB_PUSH_FILE: "" # set to null when using PostgreSQL
                 NTFY_WEB_PUSH_EMAIL_ADDRESS: "${NTFY_WEB_PUSH_EMAIL_ADDRESS}"
