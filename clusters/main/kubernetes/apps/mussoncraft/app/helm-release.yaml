@@ -130,6 +130,7 @@ spec:
                 ALLOW_LIST: true
                 ALLOW_LIST_USERS: "${MINECRAFT_ALLOW_LIST_USERS}"
                 CONTENT_LOG_CONSOLE_OUTPUT_ENABLED: true
+                STOP_SERVER_ANNOUNCE_DELAY: 55
               probes:
                 startup:
                   type: tcp
