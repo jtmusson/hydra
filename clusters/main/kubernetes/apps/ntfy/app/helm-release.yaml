@@ -117,7 +117,7 @@ spec:
                 # NTFY_DATABASE_URL: "postgres://{{ .Values.cnpg.main.user }}:$(DB_PASSWORD)@$(DB_HOST):5432/{{ .Values.cnpg.main.database }}"
                 NTFY_DATABASE_URL:
                   secretKeyRef:
-                    name: ntfy-cnpg-main-urls
+                    name: cnpg-main-urls
                     key: std
                 # Auth
                 NTFY_AUTH_DEFAULT_ACCESS: "deny-all"
