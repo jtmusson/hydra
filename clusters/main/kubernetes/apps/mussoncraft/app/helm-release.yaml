@@ -27,6 +27,7 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
+  terminationGracePeriodSeconds: 90
   values:
     global:
       stopAll: false # change to 'true' to stop all pods whenever world maintenance is needed
@@ -130,7 +131,7 @@ spec:
                 ALLOW_LIST: true
                 ALLOW_LIST_USERS: "${MINECRAFT_ALLOW_LIST_USERS}"
                 CONTENT_LOG_CONSOLE_OUTPUT_ENABLED: true
-                STOP_SERVER_ANNOUNCE_DELAY: 55
+                STOP_SERVER_ANNOUNCE_DELAY: 60
               probes:
                 startup:
                   type: tcp
