@@ -98,6 +98,7 @@ spec:
             main:
               env:
                 HOMEPAGE_ALLOWED_HOSTS: "homepage.${BASE_DOMAIN}"
+                HOMEPAGE_EXTERNAL_URL: "https://homepage.${BASE_DOMAIN}"
               probes:
                 liveness:
                   path: "/api/healthcheck"
