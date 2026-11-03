@@ -97,7 +97,7 @@ spec:
           containers:
             main:
               env:
-                HOMEPAGE_ALLOWED_HOSTS: "*"
+                HOMEPAGE_ALLOWED_HOSTS: "homepage.${BASE_DOMAIN}"
               probes:
                 liveness:
                   path: "/api/healthcheck"
