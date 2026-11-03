@@ -27,7 +27,6 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
-  terminationGracePeriodSeconds: 90
   values:
     global:
       stopAll: false # change to 'true' to stop all pods whenever world maintenance is needed
@@ -38,6 +37,8 @@ spec:
     resources:
       requests:
         cpu: 50m
+    podOptions:
+      terminationGracePeriodSeconds: 90
     credentials:
       backblaze:
         accessKey: "${B2_ACCESSKEY}"
