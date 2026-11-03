@@ -106,15 +106,19 @@ spec:
                 # NTFY_CACHE_FILE: "" # set to null when using PostgreSQL
                 # NTFY_AUTH_FILE: "" # set to null when using PostgreSQL
                 # Database
-                DB_HOST:
+                # DB_HOST:
+                #   secretKeyRef:
+                #     name: cnpg-main-urls
+                #     key: host
+                # DB_PASSWORD:
+                #   secretKeyRef:
+                #     name: cnpg-main-user
+                #     key: password
+                # NTFY_DATABASE_URL: "postgres://{{ .Values.cnpg.main.user }}:$(DB_PASSWORD)@$(DB_HOST):5432/{{ .Values.cnpg.main.database }}"
+                NTFY_DATABASE_URL:
                   secretKeyRef:
-                    name: cnpg-main-urls
-                    key: host
-                DB_PASSWORD:
-                  secretKeyRef:
-                    name: cnpg-main-user
-                    key: password
-                NTFY_DATABASE_URL: "postgres://{{ .Values.cnpg.main.user }}:$(DB_PASSWORD)@$(DB_HOST):5432/{{ .Values.cnpg.main.database }}"
+                    name: ntfy-cnpg-main-urls
+                    key: std
                 # Auth
                 NTFY_AUTH_DEFAULT_ACCESS: "deny-all"
                 NTFY_AUTH_USERS: "${NTFY_AUTH_USERS}"
