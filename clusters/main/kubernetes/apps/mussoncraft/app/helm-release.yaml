@@ -108,7 +108,7 @@ spec:
             main:
               env:
                 # renovate: datasource=custom.minecraft-bedrock depName=minecraft-bedrock
-                VERSION: 1.26.61.1
+                VERSION: 1.26.62.1
                 TRANSPORT: nethernet
                 SERVER_UDP_PORTS: "{{ .Values.service.main.loadBalancerIP }}:19140-19155:19140-19155"
                 ALLOW_CHEATS: false
