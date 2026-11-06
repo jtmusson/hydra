@@ -101,7 +101,7 @@ spec:
                 OUTPUT_TEMPLATE: "%(title)s [%(id)s].%(ext)s"
                 OUTPUT_TEMPLATE_PLAYLIST: ""
                 OUTPUT_TEMPLATE_CHANNEL: ""
-                YTDL_OPTIONS: '{"max_filesize":4000000000,"ratelimit":20000000,"writesubtitles":true,"subtitleslangs":["en","-live_chat"],"updatetime":false,"cachedir":"/tmp/yt-dlp-cache","postprocessors":[{"key":"FFmpegEmbedSubtitle","already_have_subtitle":false},{"key":"FFmpegMetadata","add_chapters":true}]}'
+                YTDL_OPTIONS: '{"max_filesize":6000000000,"ratelimit":20000000,"writesubtitles":true,"subtitleslangs":["en","-live_chat"],"updatetime":false,"cachedir":"/tmp/yt-dlp-cache","postprocessors":[{"key":"FFmpegEmbedSubtitle","already_have_subtitle":false},{"key":"FFmpegMetadata","add_chapters":true}]}'
                 MAX_CONCURRENT_DOWNLOADS: "1"
                 CLEAR_COMPLETED_AFTER: "604800" # 1 week in seconds
                 TEMP_DIR: "/downloads/.tmp"
