@@ -37,7 +37,7 @@ spec:
         ephemeral-storage: 2Gi
       limits:
         cpu: 2000m
-        memory: 3Gi
+        memory: 4Gi
         ephemeral-storage: 4Gi
     credentials:
       backblaze:
