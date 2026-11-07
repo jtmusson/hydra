@@ -21,6 +21,7 @@ spec:
   upgrade:
     remediation:
       retries: 3
+  timeout: 15m
   values:
     speaker:
       ignoreExcludeLB: true
