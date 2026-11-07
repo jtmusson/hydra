@@ -48,7 +48,7 @@ spec:
             nginx.ingress.kubernetes.io/whitelist-source-range: ${WHITELIST_IP_RANGE}
           hosts:
             - host: homepage-vs.${BASE_DOMAIN}
-              path:
+              paths:
                 - path: /
                   pathType: Prefix
           integrations:
