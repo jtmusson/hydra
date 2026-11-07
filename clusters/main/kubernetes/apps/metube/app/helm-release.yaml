@@ -34,11 +34,9 @@ spec:
       requests:
         cpu: 50m
         memory: 2Gi
-        ephemeral-storage: 2Gi
       limits:
         cpu: 2000m
         memory: 6Gi
-        ephemeral-storage: 4Gi
     credentials:
       backblaze:
         accessKey: "${B2_ACCESSKEY}"
@@ -78,18 +76,6 @@ spec:
         path: "${PATH_MOVIES}/_MakeMKV_Out"
         server: "${PLUTO_IP}"
         type: nfs
-      tmp:
-        enabled: true
-        size: 1Gi
-      devshm:
-        enabled: true
-        size: 1Gi
-      varlogs:
-        enabled: true
-        size: 1Gi
-      varrun:
-        enabled: true
-        size: 1Gi
     workload:
       main:
         podSpec:
