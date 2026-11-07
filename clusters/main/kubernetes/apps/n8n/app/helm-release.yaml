@@ -55,7 +55,6 @@ spec:
         accessKey: "${B2_ACCESSKEY}"
         bucket: "${B2_BUCKET}"
         encrKey: "${B2_ENCRKEY}"
-        name: backblaze
         secretKey: "${B2_SECRETKEY}"
         type: s3
         url: "${B2_URL}"
