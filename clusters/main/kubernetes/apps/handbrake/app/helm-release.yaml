@@ -75,7 +75,6 @@ spec:
         hosts:
           - host: handbrake.${BASE_DOMAIN}
         integrations:
-          enabled: true
           certManager:
             certificateIssuer: "cloudflare-prod"
             enabled: true
