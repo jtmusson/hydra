@@ -124,7 +124,7 @@ spec:
       html:
         enabled: true
         volsync:
-          - name: html-4
+          - name: html-5
             credentials: backblaze
             type: restic
             dest:
