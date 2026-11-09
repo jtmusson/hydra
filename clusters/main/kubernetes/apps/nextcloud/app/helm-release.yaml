@@ -128,7 +128,7 @@ spec:
             credentials: backblaze
             type: restic
             dest:
-              enabled: true # set to true on restore from backup
+              enabled: false # set to true on restore from backup
               cacheCapacity: 10Gi
             src:
               enabled: true
