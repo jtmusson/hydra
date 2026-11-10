@@ -95,6 +95,7 @@ spec:
           containers:
             main:
               env:
+                BASE_URL: "https://linkwarden.${BASE_DOMAIN}"
                 NEXT_PUBLIC_DISABLE_REGISTRATION: false
                 NEXT_PUBLIC_CREDENTIALS_ENABLED: true
                 NEXT_PUBLIC_EMAIL_PROVIDER: true
