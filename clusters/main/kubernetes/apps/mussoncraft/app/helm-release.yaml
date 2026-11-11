@@ -51,11 +51,11 @@ spec:
       config:
         enabled: true
         volsync:
-          - name: config
+          - name: config-1
             credentials: backblaze
             type: restic
             dest:
-              enabled: true
+              enabled: false
             src:
               enabled: true
               trigger:
