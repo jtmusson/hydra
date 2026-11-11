@@ -122,7 +122,7 @@ spec:
                 startup:
                   type: tcp
               env:
-                TUDUDI_USER_EMAIL: "${EMAIL1}"
+                TUDUDI_USER_EMAIL: "${EMAIL0}"
                 TUDUDI_USER_PASSWORD: "${TUDUDI_USER_PASSWORD}"
                 TUDUDI_SESSION_SECRET: "${TUDUDI_SESSION_SECRET}"
                 TUDUDI_ALLOWED_ORIGINS: "https://tududi.${BASE_DOMAIN}"
