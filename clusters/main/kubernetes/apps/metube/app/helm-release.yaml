@@ -32,10 +32,9 @@ spec:
       stopAll: false
     resources:
       requests:
-        cpu: 50m
+        cpu: 100m
         memory: 2Gi
       limits:
-        cpu: 2000m
         memory: 6Gi
     credentials:
       backblaze:
