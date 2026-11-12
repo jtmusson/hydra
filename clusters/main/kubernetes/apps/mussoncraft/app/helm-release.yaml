@@ -109,7 +109,7 @@ spec:
                 # renovate: datasource=custom.minecraft-bedrock depName=minecraft-bedrock
                 VERSION: 1.26.63.1
                 TRANSPORT: nethernet
-                SERVER_UDP_PORTS: "{{ .Values.service.main.loadBalancerIP }}:19140-19155:19140-19155"
+                SERVER_UDP_PORTS: "{{ .Values.service.main.loadBalancerIP }}:19140-19155"
                 ALLOW_CHEATS: false
                 DIFFICULTY: normal
                 GAMEMODE: survival
