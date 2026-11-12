@@ -79,11 +79,11 @@ spec:
       config:
         enabled: true
         volsync:
-          - name: config-4
+          - name: config-5
             credentials: backblaze
             type: restic
             dest:
-              enabled: true # ensure this is set to "true" before attempting restore
+              enabled: false # ensure this is set to "true" before attempting restore
               cacheCapacity: 10Gi
             src:
               enabled: true
