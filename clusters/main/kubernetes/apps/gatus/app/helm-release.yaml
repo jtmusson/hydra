@@ -355,12 +355,6 @@ spec:
                   - "[STATUS] == 200"
                   - "has([BODY]) == true"
                   - "[CERTIFICATE_EXPIRATION] > 48h"
-              - name: lldap
-                <<: *defaults-apps
-                url: "https://lldap.${BASE_DOMAIN}"
-                conditions:
-                  - "[STATUS] == 200"
-                  - "[CERTIFICATE_EXPIRATION] > 48h"
 
               ## dns
               - name: pihole-dns
