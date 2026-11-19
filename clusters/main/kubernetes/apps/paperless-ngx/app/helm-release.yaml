@@ -114,6 +114,7 @@ spec:
                 PAPERLESS_WORKER_TIMEOUT: "300"
                 PAPERLESS_URL: "https://paperless-ngx.${BASE_DOMAIN}"
                 PAPERLESS_CSRF_TRUSTED_ORIGINS: "https://*.${BASE_DOMAIN}, https://*.${BASE_DOMAIN_EXT}"
+                PAPERLESS_ALLOWED_HOSTS: "paperless-ngx.${BASE_DOMAIN},paperless-ngx.paperless-ngx.svc.cluster.local,paperless-ngx.paperless-ngx.svc,localhost"
                 PAPERLESS_EMAIL_HOST: "${SMTP_SERVER}"
                 PAPERLESS_EMAIL_PORT: "${SMTP_PORT}"
                 PAPERLESS_EMAIL_HOST_USER: "${PAPERLESS_EMAIL_HOST_USER}"
