@@ -11,7 +11,6 @@ resources:
   - it-tools/ks.yaml
   - jellyfin/ks.yaml
   - linkwarden/ks.yaml
-# - lldap/ks.yaml
   - makemkv/ks.yaml
   - metube/ks.yaml
   - minecraft-bedrock/ks.yaml
