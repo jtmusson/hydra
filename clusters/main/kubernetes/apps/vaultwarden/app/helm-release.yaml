@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: vaultwarden
-      version: 31.1.4
+      version: 32.0.0
       sourceRef:
         kind: HelmRepository
         name: truecharts
